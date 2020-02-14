@@ -90,6 +90,7 @@ fi
 # some more ls aliases
 alias ll='ls -alFh'
 alias la='ls -A'
+alias ld='ls -d */'
 alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
@@ -124,3 +125,5 @@ alias py="python3 $1"
 function straceall {
   strace $(pidof "${1}" | sed 's/\([0-9]*\)/-p \1/g')
 }
+
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
