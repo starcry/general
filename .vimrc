@@ -1,6 +1,6 @@
 filetype plugin indent on                                                                                                                                                                                          
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab 
 set cursorline
 set cursorcolumn
@@ -13,3 +13,7 @@ autocmd BufWinLeave * call clearmatches()
 set statusline+=%F%=%l/%c
 set hlsearch
 set laststatus=2
+syntax on
+set colorcolumn=80
+set autoindent
+set paste
