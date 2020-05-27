@@ -1,7 +1,7 @@
-filetype plugin indent on                                                                                                                                                                                          
+filetype plugin indent on
 set tabstop=2
 set shiftwidth=2
-set expandtab 
+set expandtab
 set cursorline
 set cursorcolumn
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -17,3 +17,4 @@ syntax on
 set colorcolumn=80
 set autoindent
 set paste
+set background=dark
