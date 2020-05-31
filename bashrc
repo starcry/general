@@ -21,3 +21,15 @@ alias tg="terragrunt"
 alias tgp="tg plan"
 alias rb=". ~/.bashrc"
 
+function tgf() {
+	for i in $(find -name "terragrunt*" | grep -v terragrunt-cache)
+		do TEMP=$(echo $i | sed 's/hcl/tf/g')
+		mv $i $TEMP
+		terraform fmt $TEMP
+		mv $TEMP $i
+	done
+}
+
+#neovim magics
+# now you can copy to clipboard with '+y'
+set clipboard+=unnamedplus
