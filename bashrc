@@ -20,6 +20,7 @@ alias tf="terraform"
 alias tg="terragrunt"
 alias tgp="tg plan"
 alias rb=". ~/.bashrc"
+alias tgo="tmux -vv new -s aidan"
 
 alias ssm="aws ssm start-session --target $i"
 
