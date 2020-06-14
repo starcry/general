@@ -21,6 +21,13 @@ alias tg="terragrunt"
 alias tgp="tg plan"
 alias rb=". ~/.bashrc"
 
+alias ssm="aws ssm start-session --target $i"
+
+function ins() {
+	local TAG="${2:-Name}"
+	echo "aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text"
+}
+
 function tgf() {
 	for i in $(find -name "terragrunt*" | grep -v terragrunt-cache)
 		do TEMP=$(echo $i | sed 's/hcl/tf/g')
@@ -29,6 +36,9 @@ function tgf() {
 		mv $TEMP $i
 	done
 }
+
+#doing this in tmux breaks things for some reason
+alias txp="tmux show-buffer | xclip -sel clip -i"
 
 #neovim magics
 # now you can copy to clipboard with '+y'
