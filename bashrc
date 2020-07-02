@@ -24,9 +24,17 @@ alias tgo="tmux -vv new -s aidan"
 
 alias ssm="aws ssm start-session --target $i"
 
-function ins() {
+alias lsd="du -chs $(ls -d */)"
+
+function insid() {
+	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' --output text
+}
+
+function instag() {
 	local TAG="${2:-Name}"
-	echo "aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text"
+	echo "aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' --output text"
+	TAGID=$(aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' --output text)
+	echo $TAGID
 }
 
 function tgf() {
@@ -39,8 +47,8 @@ function tgf() {
 }
 
 #doing this in tmux breaks things for some reason
-alias txp="tmux show-buffer | xclip -sel clip -i"
+alias tcp="tmux show-buffer | xclip -sel clip -i"
 
 #neovim magics
 # now you can copy to clipboard with '+y'
-set clipboard+=unnamedplus
+#set clipboard+=unnamedplus
