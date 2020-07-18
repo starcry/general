@@ -18,3 +18,12 @@ set colorcolumn=80
 set autoindent
 set paste
 set background=dark
+call plug#begin()
+Plug 'preservim/nerdtree'
+"Plug 'roxma/nvim-completion-manager'
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+call plug#end()
+autocmd VimEnter * NERDTree
