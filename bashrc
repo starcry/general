@@ -49,6 +49,10 @@ function tgf() {
 #doing this in tmux breaks things for some reason
 alias tcp="tmux show-buffer | xclip -sel clip -i"
 
+function awsp() {
+	export AWS_PROFILE=$1
+}
+
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus

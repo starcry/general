@@ -25,5 +25,7 @@ Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'PProvost/vim-ps1'
 call plug#end()
 autocmd VimEnter * NERDTree
+
