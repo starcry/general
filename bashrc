@@ -26,6 +26,10 @@ alias ssm="aws ssm start-session --target $i"
 
 alias lsd="du -chs $(ls -d */)"
 
+alias gr="cd $(git rev-parse --show-toplevel)"
+
+alias ocp="xclip -i -sel c"
+
 function insid() {
 	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' --output text
 }
@@ -56,3 +60,6 @@ function awsp() {
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus
+
+
+let $BASH_ENV = "~/.vim_bash_env"

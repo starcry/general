@@ -1,7 +1,6 @@
 filetype plugin indent on
 set tabstop=2
 set shiftwidth=2
-set expandtab
 set cursorline
 set cursorcolumn
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -15,7 +14,6 @@ set hlsearch
 set laststatus=2
 syntax on
 set colorcolumn=80
-set autoindent
 set paste
 set background=dark
 call plug#begin()
@@ -28,4 +26,6 @@ Plug 'honza/vim-snippets'
 Plug 'PProvost/vim-ps1'
 call plug#end()
 autocmd VimEnter * NERDTree
-
+set autoindent
+"!alias ocp="xclip -i -sel c"
+set expandtab
