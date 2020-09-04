@@ -68,4 +68,3 @@ function awsp() {
 #set clipboard+=unnamedplus
 
 
-#let $BASH_ENV = "~/.vim_bash_env"
