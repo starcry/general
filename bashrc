@@ -7,7 +7,8 @@ alias ms="minikube start; minikube addons enable ingress"
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gdm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit master.."
 alias gs="git status"
-alias gaa="git add -A"
+alias gat="git ls-files --modified | xargs git add"
+alias gaa="git add -u"
 alias gb="git branch | grep \"*\" | cut -d ' ' -f2"
 function gco() {
 	BRANCH=$(gb)
@@ -25,6 +26,15 @@ alias tgo="tmux -vv new -s aidan"
 alias ssm="aws ssm start-session --target $i"
 
 alias lsd="du -chs $(ls -d */)"
+
+alias gr="cd $(git rev-parse --show-toplevel)"
+
+alias ocp="xclip -i -sel c"
+
+function gg() {
+  echo $1
+  git grep $1 $(pwd | cut -d '/' -f1,2,3,4,5)
+}
 
 function insid() {
 	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' --output text
@@ -56,3 +66,6 @@ function awsp() {
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus
+
+
+#let $BASH_ENV = "~/.vim_bash_env"
