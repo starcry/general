@@ -63,6 +63,8 @@ function awsp() {
 	export AWS_PROFILE=$1
 }
 
+PS1="[\$(date +%k:%M)] $PS1"
+
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus
