@@ -63,6 +63,15 @@ function awsp() {
 	export AWS_PROFILE=$1
 }
 
+function fmtbranch() {
+  for i in $(find -name "*.hcl" | sed 's/\.hcl//'); do
+    mv $i.hcl $i.tf
+    terraform fmt $i.tf
+    mv $i.tf
+    $i.hcl
+  done
+}
+
 PS1="[\$(date +%k:%M)] $PS1"
 
 #neovim magics
