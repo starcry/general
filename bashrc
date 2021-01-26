@@ -20,6 +20,7 @@ function gco() {
 alias tf="terraform"
 alias tg="terragrunt"
 alias tgp="tg plan"
+alias tfp="tf plan"
 alias rb=". ~/.bashrc"
 alias tgo="tmux -vv new -s aidan"
 
@@ -42,8 +43,10 @@ function insid() {
 
 function instag() {
 	local TAG="${2:-Name}"
-	echo "aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' --output text"
-	TAGID=$(aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name]' --output text)
+  echo $TAG
+  echo $1
+	echo "aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==\`Name\`]| [0].Value]' --output text"
+	TAGID=$(aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text)
 	echo $TAGID
 }
 
@@ -53,6 +56,12 @@ function tgf() {
 		mv $i $TEMP
 		terraform fmt $TEMP
 		mv $TEMP $i
+	done
+}
+
+function tff() {
+	for i in $(find -name "*.tf" | grep -v terragrunt-cache)
+		do terraform fmt $i
 	done
 }
 

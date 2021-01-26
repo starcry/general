@@ -29,3 +29,8 @@ autocmd VimEnter * NERDTree
 set autoindent
 "!alias ocp="xclip -i -sel c"
 set expandtab
+
+if bufwinnr(1)
+  map + <C-W>+
+  map - <C-W>-
+endif
