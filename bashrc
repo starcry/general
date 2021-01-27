@@ -32,6 +32,8 @@ alias gr="cd $(git rev-parse --show-toplevel)"
 
 alias ocp="xclip -i -sel c"
 
+alias choco="echo \"scripts/windows/iis/setup.ps1:Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\""
+
 function gg() {
   echo $1
   git grep $1 $(pwd | cut -d '/' -f1,2,3,4,5)
