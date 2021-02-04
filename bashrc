@@ -26,7 +26,7 @@ alias tgo="tmux -vv new -s aidan"
 
 alias ssm="aws ssm start-session --target $i"
 
-alias lsd="du -chs $(ls -d */)"
+alias lsd="ls -d */ | xargs du -chs | grep -v total"
 
 alias gr="cd $(git rev-parse --show-toplevel)"
 
@@ -67,7 +67,6 @@ function tff() {
 	done
 }
 
-#doing this in tmux breaks things for some reason
 alias tcp="tmux show-buffer | xclip -sel clip -i"
 
 function awsp() {
