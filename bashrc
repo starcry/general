@@ -20,7 +20,8 @@ function gco() {
 alias tf="terraform"
 alias tg="terragrunt"
 alias tgp="tg plan"
-alias tfp="tf plan"
+alias tfp="tf plan -out=tf.plan"
+alias tfa="tf apply tf.plan"
 alias rb=". ~/.bashrc"
 alias tgo="tmux -vv new -s aidan"
 
