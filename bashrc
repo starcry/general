@@ -36,8 +36,7 @@ alias ocp="xclip -i -sel c"
 alias choco="echo \"scripts/windows/iis/setup.ps1:Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\""
 
 function gg() {
-  echo $1
-  git grep $1 $(pwd | cut -d '/' -f1,2,3,4,5)
+  git grep -n $1 -- `git rev-parse --show-toplevel`
 }
 
 function insid() {
@@ -46,11 +45,12 @@ function insid() {
 
 function instag() {
 	local TAG="${2:-Name}"
-  echo $TAG
-  echo $1
-	echo "aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==\`Name\`]| [0].Value]' --output text"
-	TAGID=$(aws ec2 describe-instances --filter 'Name=tag:$TAG,Values=$1' --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text)
-	echo $TAGID
+	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+}
+
+function testytest() {
+  echo "hello world" > /tmp/testytest
+  cat /tmp/testytest
 }
 
 function tgf() {
