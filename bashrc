@@ -44,12 +44,12 @@ function gg() {
 }
 
 function insid() {
-	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
 function instag() {
 	local TAG="${2:-Name}"
-	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
 function testytest() {
