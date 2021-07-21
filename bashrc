@@ -56,6 +56,14 @@ function lins() {
   aws ec2 describe-instances --filter "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text | column -t
 }
 
+function lssec() {
+  aws secretsmanager list-secrets --query 'SecretList[].[Name,ARN]' --output text | column -t
+}
+
+function getsec() {
+  aws secretsmanager get-secret-value --secret-id $1 --query 'SecretString' --output text | sed 's/\\//g' | jq | grep -v '{\|}' | sed 's/"//g;s/://g;s/,//g;s/  //g' | column -t -s ' '
+}
+
 function testytest() {
   echo "hello world" > /tmp/testytest
   cat /tmp/testytest
