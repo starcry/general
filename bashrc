@@ -61,7 +61,11 @@ function lssec() {
 }
 
 function getsec() {
-  aws secretsmanager get-secret-value --secret-id $1 --query 'SecretString' --output text | sed 's/\\//g' | jq | grep -v '{\|}' | sed 's/"//g;s/://g;s/,//g;s/  //g' | column -t -s ' '
+  for i in $(aws secretsmanager list-secrets --query 'SecretList[].[Name,ARN]' --output text | column -t | grep $1 | awk '{print $2}'); do
+    echo Secret: $(echo $i | sed 's/.*://g')
+    aws secretsmanager get-secret-value --secret-id $i --query 'SecretString' --output text | sed 's/\\//g' | jq | grep -v '{\|}' | sed 's/"//g;s/://g;s/,//g;s/  //g' | column -t -s ' '
+    echo
+  done
 }
 
 function testytest() {
