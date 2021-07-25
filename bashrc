@@ -35,17 +35,37 @@ alias ocp="xclip -i -sel c"
 
 alias choco="echo \"scripts/windows/iis/setup.ps1:Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))\""
 
+alias rts="find . -not -path '*/\\.*' | xargs -I {} sed -i 's/[[:space:]]*$//' {}"
+
+alias ppc="column -t -s, $1"
+
 function gg() {
   git grep -n $1 -- `git rev-parse --show-toplevel`
 }
 
 function insid() {
-	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
 function instag() {
 	local TAG="${2:-Name}"
-	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+}
+
+function lins() {
+  aws ec2 describe-instances --filter "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text | column -t
+}
+
+function lssec() {
+  aws secretsmanager list-secrets --query 'SecretList[].[Name,ARN]' --output text | column -t
+}
+
+function getsec() {
+  for i in $(aws secretsmanager list-secrets --query 'SecretList[].[Name,ARN]' --output text | column -t | grep $1 | awk '{print $2}'); do
+    echo Secret: $(echo $i | sed 's/.*://g')
+    aws secretsmanager get-secret-value --secret-id $i --query 'SecretString' --output text | sed 's/\\//g' | jq | grep -v '{\|}' | sed 's/"//g;s/://g;s/,//g;s/  //g' | column -t -s ' '
+    echo
+  done
 }
 
 function testytest() {
