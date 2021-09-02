@@ -25,8 +25,6 @@ alias tfa="tf apply tf.plan"
 alias rb=". ~/.bashrc"
 alias tgo="tmux -vv new -s aidan"
 
-alias ssm="aws ssm start-session --target $i"
-
 alias lsd="ls -d */ | xargs du -chs | grep -v total"
 
 alias gr="cd $(git rev-parse --show-toplevel)"
@@ -52,6 +50,19 @@ function instag() {
 	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
+alias ssm="aws ssm start-session --target $i"
+
+function sst() {
+  IFS=$'\n'
+  echo "logging you into these instances"
+  instag $1
+  INSID=$(instag $1 | cut -f1)
+  for i in $(instag $1); do 
+    echo "logging you into $i"
+    ssm $(echo $i | cut -f1)
+   done
+}
+
 function lins() {
   aws ec2 describe-instances --filter "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text | column -t
 }
@@ -66,11 +77,6 @@ function getsec() {
     aws secretsmanager get-secret-value --secret-id $i --query 'SecretString' --output text | sed 's/\\//g' | jq | grep -v '{\|}' | sed 's/"//g;s/://g;s/,//g;s/  //g' | column -t -s ' '
     echo
   done
-}
-
-function testytest() {
-  echo "hello world" > /tmp/testytest
-  cat /tmp/testytest
 }
 
 function tgf() {
