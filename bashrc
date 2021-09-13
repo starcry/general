@@ -55,9 +55,9 @@ alias ssm="aws ssm start-session --target $i"
 function sst() {
   IFS=$'\n'
   echo "logging you into these instances"
-  instag $1
+  instag $1 | grep running
   INSID=$(instag $1 | cut -f1)
-  for i in $(instag $1); do 
+  for i in $(instag $1 | grep running); do
     echo "logging you into $i"
     ssm $(echo $i | cut -f1)
    done
