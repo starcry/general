@@ -38,7 +38,7 @@ alias rts="find . -not -path '*/\\.*' | xargs -I {} sed -i 's/[[:space:]]*$//' {
 alias ppc="column -t -s, $1"
 
 function gg() {
-  git grep -n $1 -- `git rev-parse --show-toplevel`
+  git grep -i -n $1 -- `git rev-parse --show-toplevel`
 }
 
 function insid() {
