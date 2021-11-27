@@ -15,3 +15,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/aws
 RUN unzip /tmp/awscliv2.zip -d /tmp
 RUN /tmp/aws/install
 RUN echo 'source <(curl -s https://raw.githubusercontent.com/starcry/general/master/bashrc)' >> /root/.bashrc
+RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+COPY setup.sh /root/setup.sh
+
+CMD wget https://raw.githubusercontent.com/starcry/general/master/vimrc -O /root/.vimrc && \
+  vim -c 'PlugInstall' -c 'qa!' && \
+  /bin/bash
+
