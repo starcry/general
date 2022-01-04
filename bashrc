@@ -47,7 +47,7 @@ function insid() {
 
 function instag() {
 	local TAG="${2:-Name}"
-	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1"  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
 alias ssm="aws ssm start-session --target $i"
@@ -55,9 +55,10 @@ alias ssm="aws ssm start-session --target $i"
 function sst() {
   IFS=$'\n'
   echo "logging you into these instances"
-  instag $1 | grep running
-  INSID=$(instag $1 | cut -f1)
-  for i in $(instag $1 | grep running); do
+  NAME="'*$1*'"
+  instag $NAME | grep running
+  INSID=$(instag $NAME | grep running | cut -f1)
+  for i in $(instag $NAME | grep running); do
     echo "logging you into $i"
     ssm $(echo $i | cut -f1)
    done
