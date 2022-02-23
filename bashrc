@@ -47,7 +47,8 @@ function insid() {
 
 function instag() {
 	local TAG="${2:-Name}"
-	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$1"  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+	local VALUE="${1:-*}"
+	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$VALUE"  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,Platform,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
 alias ssm="aws ssm start-session --target $i"
