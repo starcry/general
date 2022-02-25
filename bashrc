@@ -51,6 +51,24 @@ function instag() {
 	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$VALUE"  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,Platform,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
+function inssec() {
+  local INSID=$1
+  local SUMMARY=$2
+  SGIDS=$(aws ec2 describe-instances --instance-ids $INSID --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Groups[*].GroupId' --output text)
+  echo "instance $INSID has security groups\n$SGIDS"
+  for i in $SGIDS; do
+    echo "rules for $i"
+    aws ec2 describe-security-group-rules --filters "Name=group-id,Values=$i" --query 'SecurityGroupRules[*].[IsEgress,FromPort,ToPort,CidrIpv4,Description]' --output text | \
+      awk '$1 == "False"' | \
+      cut -f2- | \
+      sed '1i FromPort ToPort CidrIpv4 Description' | \
+      column --table
+    # inssec i-0cbffe08369061686 | grep -v "rules for sg-\|FromPort.*ToPort.*CidrIpv4\|instance.*i-" | grep . | awk '{print $1, $2, $3}' | sort -u | column --table
+    echo
+  done | grep -v "rules for sg-\|FromPort.*ToPort.*CidrIpv4\|instance.*i-" | grep . | awk '{print $1, $2, $3}' | sort -u | column --table
+}
+
+
 alias ssm="aws ssm start-session --target $i"
 
 function sst() {
