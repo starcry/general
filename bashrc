@@ -129,6 +129,17 @@ function fmtbranch() {
   done
 }
 
+function taws() {
+  if [ $1 -n ]
+  then
+    export AWS_ACCESS_KEY_ID=$1
+    export AWS_SECRET_ACCESS_KEY=$2
+  else
+    unset AWS_ACCESS_KEY_ID
+    unset AWS_SECRET_ACCESS_KEY
+  fi
+}
+
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/:(\1)/'
 }
