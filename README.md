@@ -41,3 +41,4 @@ in my current role I have to use windows so all my Linux magic happens on a VM, 
        * `alias msha="sudo mount -t cifs //<computer name>/<path to shared directory> ~/shared -o user=$(whoami),uid=$UID,gid=$(getent group $(whoami) | cut -d ':' -f3)"`
    1. restart your bash and msha should automatically mount the directory
        * You'll probably notice that everything has execute, not sure why that is the case yet or how to fix it
+
