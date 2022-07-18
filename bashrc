@@ -25,6 +25,8 @@ alias tfa="tf apply tf.plan"
 alias rb=". ~/.bashrc"
 alias tgo="tmux -vv new -s aidan"
 
+alias fn="find -name $1"
+
 alias lsd="ls -d */ | xargs du -chs | grep -v total"
 
 alias gr="cd $(git rev-parse --show-toplevel)"
@@ -36,6 +38,10 @@ alias choco="echo \"scripts/windows/iis/setup.ps1:Set-ExecutionPolicy Bypass -Sc
 alias rts="find . -not -path '*/\\.*' | xargs -I {} sed -i 's/[[:space:]]*$//' {}"
 
 alias ppc="column -t -s, $1"
+
+function hc() {
+  COMMAND=$(history | tail -n $1 | head -n1 | awk '{$1="";print substr($0,2)}')
+}
 
 function gg() {
   git grep -i -n $1 -- `git rev-parse --show-toplevel`
@@ -145,6 +151,11 @@ parse_git_branch() {
 }
 
 PS1="[\$(date +%k:%M)] $(echo $PS1 | sed 's/..$//')\$(parse_git_branch)\[\033[00m\]$ "
+
+function tflog() {
+  export TF_LOG=DEBUG
+  export TF_LOG_PATH=$(pwd)/log.log
+}
 
 
 #neovim magics
