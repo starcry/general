@@ -39,6 +39,12 @@ alias rts="find . -not -path '*/\\.*' | xargs -I {} sed -i 's/[[:space:]]*$//' {
 
 alias ppc="column -t -s, $1"
 
+function lsak() {
+  for i in $(aws iam list-users --query 'Users[*].UserName' --output text)
+    do aws iam list-access-keys --user-name $i --query 'AccessKeyMetadata[*].[UserName, AccessKeyId]' --output text
+  done
+}
+
 function hc() {
   COMMAND=$(history | tail -n $1 | head -n1 | awk '{$1="";print substr($0,2)}')
 }
