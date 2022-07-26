@@ -156,6 +156,11 @@ parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/:(\1)/'
 }
 
+function cdr() {
+  PLEVEL=$(git grep . -- `git rev-parse --show-toplevel` | sed 's/:.*//g' | head -n1 | grep -o '../' | wc -l)
+  for (( i=1; i<=$PLEVEL; i++ )); do cd ../; done
+ }
+
 PS1="[\$(date +%k:%M)] $(echo $PS1 | sed 's/..$//')\$(parse_git_branch)\[\033[00m\]$ "
 
 function tflog() {
