@@ -23,13 +23,14 @@ alias tgp="tg plan"
 alias tfp="tf plan -out=tf.plan"
 alias tfa="tf apply tf.plan"
 alias rb=". ~/.bashrc"
-alias tgo="tmux -vv new -s aidan"
+alias tgo="tmux new -s aidan"
 
 alias fn="find -name $1"
 
 alias lsd="ls -d */ | xargs du -chs | grep -v total"
 
 alias gr="cd $(git rev-parse --show-toplevel)"
+#alias gr="echo $(git rev-parse --show-toplevel)"
 
 alias ocp="xclip -i -sel c"
 
@@ -158,7 +159,7 @@ parse_git_branch() {
 
 function cdr() {
   PLEVEL=$(git grep . -- `git rev-parse --show-toplevel` | sed 's/:.*//g' | head -n1 | grep -o '../' | wc -l)
-  for (( i=1; i<=$PLEVEL; i++ )); do cd ../; done
+  for (( i=1; i<$PLEVEL; i++ )); do cd ../; done
  }
 
 PS1="[\$(date +%k:%M)] $(echo $PS1 | sed 's/..$//')\$(parse_git_branch)\[\033[00m\]$ "
