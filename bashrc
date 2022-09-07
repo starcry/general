@@ -169,9 +169,13 @@ function tflog() {
   export TF_LOG_PATH=$(pwd)/log.log
 }
 
+function reni() {
+  IP=$(dig +short $1 | tail -n1)
+  aws ec2 describe-network-interfaces --query 'NetworkInterfaces[*].[NetworkInterfaceId,PrivateIpAddresses[*].PrivateIpAddress]' --output text | grep -B1 $IP | grep eni
+}
+
 
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus
-
 
