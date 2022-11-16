@@ -174,6 +174,12 @@ function reni() {
   aws ec2 describe-network-interfaces --query 'NetworkInterfaces[*].[NetworkInterfaceId,PrivateIpAddresses[*].PrivateIpAddress]' --output text | grep -B1 $IP | grep eni
 }
 
+function inspw() {
+  ID=$1
+  KEYPAIR=$2
+  aws ec2 get-password-data --instance-id $ID --priv-launch-key $KEYPAIR
+}
+
 
 #neovim magics
 # now you can copy to clipboard with '+y'
