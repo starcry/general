@@ -184,4 +184,4 @@ function inspw() {
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus
-
+source <(kubectl completion bash)
