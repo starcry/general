@@ -11,10 +11,10 @@ alias gat="git ls-files --modified | xargs git add"
 alias gaa="git add -u"
 alias gb="git branch | grep \"*\" | cut -d ' ' -f2"
 function gco() {
-	BRANCH=$(gb)
-	FUNCTION=$1
-	COMMENT="${@:2}"
-	git commit -m "$FUNCTION: $BRANCH: $COMMENT"
+  BRANCH=$(gb)
+  FUNCTION=$1
+  COMMENT="${@:2}"
+  git commit -m "$FUNCTION: $BRANCH: $COMMENT"
 }
 
 alias tf="terraform"
@@ -55,13 +55,14 @@ function gg() {
 }
 
 function insid() {
-	aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+  aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
 function instag() {
-	local TAG="${2:-Name}"
-	local VALUE="${1:-*}"
-	aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$VALUE"  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,Platform,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
+  local TAG="${2:-Name}"
+  local VALUE="${1:-*}"
+  echo "aws ec2 describe-instances --filter Name=tag:$TAG,Values=$VALUE"
+  #aws ec2 describe-instances --filter "Name=tag:$TAG,Values=$VALUE"  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,Platform,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
 function inssec() {
@@ -96,10 +97,6 @@ function sst() {
    done
 }
 
-function lins() {
-  aws ec2 describe-instances --filter "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text | column -t
-}
-
 function lssec() {
   aws secretsmanager list-secrets --query 'SecretList[].[Name,ARN]' --output text | column -t
 }
@@ -113,24 +110,25 @@ function getsec() {
 }
 
 function tgf() {
-	for i in $(find -name "terragrunt*" | grep -v terragrunt-cache)
-		do TEMP=$(echo $i | sed 's/hcl/tf/g')
-		mv $i $TEMP
-		terraform fmt $TEMP
-		mv $TEMP $i
-	done
+  for i in $(find -name "terragrunt*" | grep -v terragrunt-cache)
+    do TEMP=$(echo $i | sed 's/hcl/tf/g')
+    mv $i $TEMP
+    terraform fmt $TEMP
+    mv $TEMP $i
+  done
 }
 
 function tff() {
-	for i in $(find -name "*.tf" | grep -v terragrunt-cache)
-		do terraform fmt $i
-	done
+  for i in $(find -name "*.tf" | grep -v terragrunt-cache)
+    do terraform fmt $i
+  done
 }
 
 alias tcp="tmux show-buffer | xclip -sel clip -i"
 
 function awsp() {
-	export AWS_PROFILE=$1
+  ENV="${1:-default}"
+  export AWS_PROFILE="${1:-default}"
 }
 
 function fmtbranch() {
@@ -180,8 +178,13 @@ function inspw() {
   aws ec2 get-password-data --instance-id $ID --priv-launch-key $KEYPAIR
 }
 
+function sga () {
+  aws ec2 describe-network-interfaces --filter Name=group-id,Values="${1:-*}" --query 'NetworkInterfaces[*].Attachment'
+}
+
 
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus
 source <(kubectl completion bash)
+complete -C aws_completer aws
