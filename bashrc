@@ -74,7 +74,7 @@ function inssec() {
   local INSID=$1
   local SUMMARY=$2
   SGIDS=$(aws ec2 describe-instances --instance-ids $INSID --query 'Reservations[*].Instances[*].NetworkInterfaces[*].Groups[*].GroupId' --output text)
-  echo "instance $INSID has security groups\n$SGIDS"
+  printf "instance $INSID has security groups\n$SGIDS"; echo
   for i in $SGIDS; do
     echo "rules for $i"
     aws ec2 describe-security-group-rules --filters "Name=group-id,Values=$i" --query 'SecurityGroupRules[*].[IsEgress,FromPort,ToPort,CidrIpv4,Description]' --output text | \
@@ -185,6 +185,13 @@ function inspw() {
 
 function sga () {
   aws ec2 describe-network-interfaces --filter Name=group-id,Values="${1:-*}" --query 'NetworkInterfaces[*].Attachment'
+}
+
+function g53() {
+for i in $(aws route53 list-hosted-zones --query 'HostedZones[*].Id' --output text | xargs -n1 | sed 's_.*/__g')
+	do echo "Hosted Zone: $(aws route53 get-hosted-zone --id $i --query 'HostedZone.[Id,Name]' --output text | sed 's_.*/__g')"
+	aws route53 list-resource-record-sets --hosted-zone-id $i --query 'ResourceRecordSets[*].[Type,AliasTarget.DNSName]' --output text | grep -v "NS\|SOA"
+done | grep "Hosted Zone\|$1" | grep -B1 "$1"
 }
 
 
