@@ -58,6 +58,8 @@ function insid() {
   aws ec2 describe-instances --instance-id $1 --query 'Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
 }
 
+#aws ec2 describe-instances  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,Platform,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text --filters 'Name=hibernation-options.configured,Values=true'
+
 function instag() {
   if [ -z $1 ]
     then aws ec2 describe-instances  --query 'Reservations[*].Instances[*].[InstanceId,Placement.AvailabilityZone,InstanceType,Platform,LaunchTime,PrivateIpAddress,PublicIpAddress,State.Name,Tags[?Key==`Name`]| [0].Value]' --output text
@@ -131,6 +133,11 @@ function tff() {
 
 alias tcp="tmux show-buffer | xclip -sel clip -i"
 
+alias wp="kubectl get po --watch | grep $1"
+
+alias ep="kubectl exec -it $1 /bin/sh"
+alias gcw="git ls-files | xargs sed -i 's/[[:space:]]\+$//'"
+
 function awsp() {
   ENV="${1:-default}"
   export AWS_PROFILE="${1:-default}"
@@ -187,10 +194,25 @@ function sga () {
   aws ec2 describe-network-interfaces --filter Name=group-id,Values="${1:-*}" --query 'NetworkInterfaces[*].Attachment'
 }
 
-function g53() {
-for i in $(aws route53 list-hosted-zones --query 'HostedZones[*].Id' --output text | xargs -n1 | sed 's_.*/__g')
+alias l53="aws route53 list-hosted-zones --query 'HostedZones[*].[Id,Name]' --output text | sed 's_.*/__g'"
+
+#alias shzone="aws route53 list-resource-record-sets --hosted-zone-id $1 --query 'ResourceRecordSets[*].[Type,Name,AliasTarget.DNSName]' --output text | grep -v \"NS\|SOA\" | sort -u | column --table"
+alias shzone="aws route53 list-resource-record-sets --hosted-zone-id $1 --query 'ResourceRecordSets[*].[Type,Name,AliasTarget.DNSName]' --output text | column --table"
+#alias shzone="echo $1"
+
+function s53() {
+  local ZONES=$(l53 | grep $1 | cut -f1)
+  for i in $(echo $ZONES)
+  do l53 | grep $i
+    aws route53 list-resource-record-sets --hosted-zone-id $i --query 'ResourceRecordSets[*].[Type,Name,AliasTarget.DNSName]' --output text | grep -v "NS\|SOA" | sort -u | column --table
+  done
+}
+
+function r53() {
+for i in $(l53 | cut -f1)
 	do echo "Hosted Zone: $(aws route53 get-hosted-zone --id $i --query 'HostedZone.[Id,Name]' --output text | sed 's_.*/__g')"
-	aws route53 list-resource-record-sets --hosted-zone-id $i --query 'ResourceRecordSets[*].[Type,AliasTarget.DNSName]' --output text | grep -v "NS\|SOA"
+#	aws route53 list-resource-record-sets --hosted-zone-id $i --query 'ResourceRecordSets[*].[Type,AliasTarget.DNSName]' --output text | grep -v "NS\|SOA"
+  s53 $i
 done | grep "Hosted Zone\|$1" | grep -B1 "$1"
 }
 

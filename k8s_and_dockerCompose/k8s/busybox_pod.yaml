@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: busybox
+  name: devenv
   labels:
     app: busybox
 spec:
   containers:
-  - image: busybox
+  - image: starcry/devenv
     command:
       - "sleep"
       - "604800"
