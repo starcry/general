@@ -51,7 +51,7 @@ function hc() {
 }
 
 function gg() {
-  local TEXT="${@:2}"
+  local TEXT="${@:1}"
   git grep -i -n "$TEXT" -- `git rev-parse --show-toplevel`
 }
 
