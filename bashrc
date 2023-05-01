@@ -11,9 +11,9 @@ alias gat="git ls-files --modified | xargs git add"
 alias gaa="git add -u"
 alias gb="git branch | grep \"*\" | cut -d ' ' -f2"
 function gco() {
-  BRANCH=$(gb)
-  FUNCTION=$1
-  COMMENT="${@:2}"
+  local BRANCH=$(gb)
+  local FUNCTION=$1
+  local COMMENT="${@:2}"
   git commit -m "$FUNCTION: $BRANCH: $COMMENT"
 }
 
@@ -51,7 +51,8 @@ function hc() {
 }
 
 function gg() {
-  git grep -i -n $1 -- `git rev-parse --show-toplevel`
+  local TEXT="${@:2}"
+  git grep -i -n "$TEXT" -- `git rev-parse --show-toplevel`
 }
 
 function insid() {
