@@ -227,6 +227,11 @@ for i in $(l53 | cut -f1)
 done | grep "Hosted Zone\|$1" | grep -B1 "$1"
 }
 
+function gc() {
+  #meant for gopro mp4 footage, this should shrink it to a smaller size
+  mkdir converted
+  for i in $(ls *.MP4); do NAME=$(echo $i | cut -d '.' -f1); ffmpeg -i $i -vcodec libx265 -crf 28 converted/$NAME-converted.mp4; done
+}
 
 #neovim magics
 # now you can copy to clipboard with '+y'
