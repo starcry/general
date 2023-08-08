@@ -137,8 +137,9 @@ alias tcp="tmux show-buffer | xclip -sel clip -i"
 alias wp="kubectl get po --watch | grep $1"
 
 alias ep="kubectl exec -it $1 /bin/sh"
-alias gwr="git ls-files | xargs sed -i 's/[[:space:]]\+$//'"
-alias t2s="for i in $(git ls-files | grep "tf$\|hcl$"); do sed -i 's/\t/  /g' $i; done"
+alias gwr="for i in \$(git ls-files | grep \"tf$\|hcl$\|py$\|json$\|groovy$\|ts$\"); do sed -i 's/[[:space:]]\+$//' \$i; done"
+alias t2s="for i in \$(git ls-files | grep \"tf$\|hcl$\"); do sed -i 's/\\t/  /g' \$i; done"
+alias gba="git log | grep Author | sort | uniq -c"
 
 function fixb() {
   gwr
@@ -146,7 +147,11 @@ function fixb() {
   gco fix removing trailing spaces
   t2s
   gaa
-  fco fix converting tabs to spaces
+  gco fix converting tabs to spaces
+  terraform fmt --recursive
+  terragrunt hclfmt --recursive
+  gaa
+  gco fix aligning terragrunt and teraform files
 }
 
 function awsp() {
@@ -221,8 +226,8 @@ function s53() {
 
 function r53() {
 for i in $(l53 | cut -f1)
-	do echo "Hosted Zone: $(aws route53 get-hosted-zone --id $i --query 'HostedZone.[Id,Name]' --output text | sed 's_.*/__g')"
-#	aws route53 list-resource-record-sets --hosted-zone-id $i --query 'ResourceRecordSets[*].[Type,AliasTarget.DNSName]' --output text | grep -v "NS\|SOA"
+  do echo "Hosted Zone: $(aws route53 get-hosted-zone --id $i --query 'HostedZone.[Id,Name]' --output text | sed 's_.*/__g')"
+#  aws route53 list-resource-record-sets --hosted-zone-id $i --query 'ResourceRecordSets[*].[Type,AliasTarget.DNSName]' --output text | grep -v "NS\|SOA"
   s53 $i
 done | grep "Hosted Zone\|$1" | grep -B1 "$1"
 }
@@ -231,6 +236,16 @@ function gc() {
   #meant for gopro mp4 footage, this should shrink it to a smaller size
   mkdir converted
   for i in $(ls *.MP4); do NAME=$(echo $i | cut -d '.' -f1); ffmpeg -i $i -vcodec libx265 -crf 28 converted/$NAME-converted.mp4; done
+}
+
+function aaws() {
+  local COMMAND="$1"
+  echo $COMMAND
+  for i in $(grep "\[" $HOME/.aws/credentials | sed 's/\[//g;s/\]//g' | grep -v 'assume-')
+    do echo "account $i"
+    awsp $i
+    $COMMAND
+  done
 }
 
 #neovim magics
