@@ -132,7 +132,7 @@ function tff() {
   done
 }
 
-function () {
+function tcp()t {
   if [ "$(uname -s)" = "Linux" ]; then
     tmux show-buffer | xclip -sel clip -i
   else
