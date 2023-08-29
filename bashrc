@@ -22,7 +22,7 @@ alias tg="terragrunt"
 alias tgp="tg plan"
 alias tfp="tf plan -out=tf.plan"
 alias tfa="tf apply tf.plan"
-alias rb=". ~/.bashrc"
+alias rb=". ~/.bashrc; . .bash_profile"
 alias tgo="tmux new -s aidan"
 
 alias fn="find -name $1"
@@ -132,13 +132,11 @@ function tff() {
   done
 }
 
-alias tcp="tmux show-buffer | xclip -sel clip -i"
-
-function testytest() {
+function () {
   if [ "$(uname -s)" = "Linux" ]; then
-    echo "I am a linux"
+    tmux show-buffer | xclip -sel clip -i
   else
-    echo "I am a Mac"
+    tmux show-buffer | pbcopy
   fi
 }
 
