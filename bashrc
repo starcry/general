@@ -134,6 +134,14 @@ function tff() {
 
 alias tcp="tmux show-buffer | xclip -sel clip -i"
 
+function testytest() {
+  if [ "$(uname -s)" = "Linux" ]; then
+    echo "I am a linux"
+  else
+    echo "I am a Mac"
+  fi
+}
+
 alias wp="kubectl get po --watch | grep $1"
 
 alias ep="kubectl exec -it $1 /bin/sh"
