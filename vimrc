@@ -35,4 +35,6 @@ if bufwinnr(1)
   map - <C-W>-
 endif
 
+set backspace=indent,eol,start
+
 #! this is a test

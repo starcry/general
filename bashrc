@@ -8,8 +8,13 @@ alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %
 alias gdm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit master.."
 alias gs="git status"
 alias gat="git ls-files --modified | xargs git add"
-alias gaa="git add -u"
-alias gb="git branch | grep \"*\" | cut -d ' ' -f2"
+function gaa() {
+  git add -u
+}
+#alias gb="git branch | grep \"*\" | cut -d ' ' -f2"
+function gb() {
+  git branch | grep \"*\" | cut -d ' ' -f2
+}
 function gco() {
   local BRANCH=$(gb)
   local FUNCTION=$1
@@ -22,10 +27,10 @@ alias tg="terragrunt"
 alias tgp="tg plan"
 alias tfp="tf plan -out=tf.plan"
 alias tfa="tf apply tf.plan"
-alias rb=". ~/.bashrc; . .bash_profile"
+alias rb=". ~/.bashrc; . ~/.bash_profile"
 alias tgo="tmux new -s aidan"
 
-alias fn="find -name $1"
+alias fn="find ./ -name $1"
 
 alias lsd="ls -d */ | xargs du -chs | grep -v total"
 
@@ -117,6 +122,18 @@ function getsec() {
   done
 }
 
+function mtgf() {
+  find . -name "terragrunt*" ! -path "*/terragrunt-cache/*" -exec sh -c '
+    for i; do
+      TEMP="${i%.hcl}.tf"
+      mv "$i" "$TEMP"
+      terraform fmt "$TEMP"
+      mv "$TEMP" "$i"
+    done
+  ' sh {} +
+}
+
+
 function tgf() {
   for i in $(find -name "terragrunt*" | grep -v terragrunt-cache)
     do TEMP=$(echo $i | sed 's/hcl/tf/g')
@@ -147,18 +164,89 @@ alias gwr="for i in \$(git ls-files | grep \"tf$\|hcl$\|py$\|json$\|groovy$\|ts$
 alias t2s="for i in \$(git ls-files | grep \"tf$\|hcl$\"); do sed -i 's/\\t/  /g' \$i; done"
 alias gba="git log | grep Author | sort | uniq -c"
 
+#function fixb() {
+#  gwr
+#  gaa
+#  gco fix removing trailing spaces
+#  t2s
+#  gaa
+#  gco fix converting tabs to spaces
+#  terraform fmt --recursive
+#  terragrunt hclfmt --recursive
+#  gaa
+#  gco fix aligning terragrunt and teraform files
+#}
+
 function fixb() {
-  gwr
+  OS=$(uname -s);
+  SED_INPLACE="";
+
+  # removing trailing spaces
+  if [ "$OS" = "Linux" ]; then
+    for i in $(git ls-files | grep "tf\|hcl\|py\|json\|groovy\|ts");
+    do
+      sed -i 's/[[:space:]]\+$//' $i;
+    done;
+  else
+    for i in $(git ls-files | grep "tf\|hcl\|py\|json\|groovy\|ts");
+    do
+      sed -i '' 's/[[:space:]]\+$//' $i;
+    done;
+  fi;
   gaa
-  gco fix removing trailing spaces
-  t2s
+  gco fix removing trailing spaces;
+
+  # converting tabs to spaces
+  if [ "$OS" = "Linux" ]; then
+    for i in $(git ls-files | grep "tf$\|hcl$");
+    do
+        sed -i 's/\t/  /g' $i;
+    done;
+  else
+    for i in $(git ls-files | grep "tf$\|hcl$");
+    do
+        sed -i '' 's/\t/  /g' $i;
+    done;
+  fi;
   gaa
-  gco fix converting tabs to spaces
-  terraform fmt --recursive
-  terragrunt hclfmt --recursive
+  gco fix converting tabs to spaces;
+
+  # formatting terraform and terragrunt
+  terraform fmt --recursive;
+  terragrunt hclfmt --recursive;
   gaa
-  gco fix aligning terragrunt and teraform files
+  gco fix aligning terragrunt and terraform files
 }
+
+
+#fixb ()
+#{
+#    OS=$(uname -s)
+#    SED_INPLACE=""
+#    if [ "$OS" = "Linux" ]; then
+#        SED_INPLACE="-i"
+#    else
+#        SED_INPLACE="-i ''"
+#    fi
+#
+#    for i in $(git ls-files | grep "tf$\|hcl$\|py$\|json$\|groovy$\|ts$"); do
+#        sed $SED_INPLACE 's/[[:space:]]\+$//' $i
+#    done
+#    git add -u
+#    git checkout -b fix removing trailing spaces
+#
+#    for i in $(git ls-files | grep "tf$\|hcl$"); do
+#        sed $SED_INPLACE 's/\t/  /g' $i
+#    done
+#    git add -u
+#    git checkout -b fix converting tabs to spaces
+#
+#    terraform fmt --recursive
+#    terragrunt hclfmt --recursive
+#    git add -u
+#    git checkout -b fix aligning terragrunt and terraform files
+#}
+
 
 function awsp() {
   ENV="${1:-default}"
@@ -252,6 +340,19 @@ function aaws() {
     awsp $i
     $COMMAND
   done
+}
+
+# to activate first run
+# $ python3 -m venv $HOME/myenv
+# you will only need to do this once
+function run_python_script() {
+  if [ -z "$1" ]; then
+    echo "Usage: run_python_script <relative_path_to_script>"
+    return 1
+  fi
+  source $HOME/myenv/bin/activate
+  python3 "$1"
+  deactivate
 }
 
 #neovim magics

@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: devenv
+  name: debian
   labels:
-    app: busybox
+    app: debian
 spec:
   containers:
-  - image: starcry/devenv
+  - image: debian
     command:
       - "sleep"
       - "604800"
-    imagePullPolicy: IfNotPresent
-    name: ubuntu
+    imagePullPolicy: Always
+    name: debian
   restartPolicy: Always
 
