@@ -37,4 +37,6 @@ endif
 
 set backspace=indent,eol,start
 
+autocmd BufWritePre * :%s/\s\+$//e
+
 #! this is a test

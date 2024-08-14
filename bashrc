@@ -347,13 +347,28 @@ function aaws() {
 # you will only need to do this once
 function run_python_script() {
   if [ -z "$1" ]; then
-    echo "Usage: run_python_script <relative_path_to_script>"
+    echo "Usage: run_python_script <relative_path_to_script_or_command>"
     return 1
   fi
+
+  SCRIPT=$1
+
+  # Check if the input contains a '/'
+  if [[ "$SCRIPT" == *"/"* ]]; then
+    SCRIPT_PATH=$SCRIPT
+  else
+    SCRIPT_PATH=$(command -v "$SCRIPT")
+    if [ -z "$SCRIPT_PATH" ]; then
+      echo "Error: Command '$SCRIPT' not found"
+      return 1
+    fi
+  fi
+
   source $HOME/myenv/bin/activate
-  python3 "$1"
+  python3 "$SCRIPT_PATH" "${@:2}"
   deactivate
 }
+
 
 #neovim magics
 # now you can copy to clipboard with '+y'
