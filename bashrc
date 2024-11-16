@@ -375,3 +375,6 @@ function run_python_script() {
 #set clipboard+=unnamedplus
 source <(kubectl completion bash)
 complete -C aws_completer aws
+
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'

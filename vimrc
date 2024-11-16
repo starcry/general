@@ -16,15 +16,17 @@ syntax on
 set colorcolumn=80
 set paste
 set background=dark
-call plug#begin()
-Plug 'preservim/nerdtree'
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'preservim/nerdtree'
 "Plug 'roxma/nvim-completion-manager'
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'PProvost/vim-ps1'
-call plug#end()
+Plugin 'ncm2/ncm2'
+Plugin 'roxma/nvim-yarp'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'PProvost/vim-ps1'
+Plugin 'vim-terraform'
+call vundle#end()
 autocmd VimEnter * NERDTree
 set autoindent
 "!alias ocp="xclip -i -sel c"
@@ -40,3 +42,4 @@ set backspace=indent,eol,start
 autocmd BufWritePre * :%s/\s\+$//e
 
 #! this is a test
+let $BASH_ENV = "~/.vim_bash_env"
