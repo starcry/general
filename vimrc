@@ -20,12 +20,12 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'preservim/nerdtree'
 "Plug 'roxma/nvim-completion-manager'
+Plugin 'hashivim/vim-terraform'
 Plugin 'ncm2/ncm2'
 Plugin 'roxma/nvim-yarp'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'PProvost/vim-ps1'
-Plugin 'vim-terraform'
 call vundle#end()
 autocmd VimEnter * NERDTree
 set autoindent
