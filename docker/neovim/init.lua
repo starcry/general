@@ -12,113 +12,91 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Plugin management with Lazy.nvim
+-- Plugin Management (Lazy.nvim)
 require("lazy").setup({
   -- LSP Support
   {"neovim/nvim-lspconfig"},
 
-  -- Terraform Language Server
+  -- Terraform Language Server & Syntax Highlighting
   {"hashivim/vim-terraform"},
 
   -- Autocompletion
-  {"hrsh7th/nvim-cmp"},  -- Core autocompletion engine
-  {"hrsh7th/cmp-nvim-lsp"},  -- LSP source for cmp
-  {"hrsh7th/cmp-buffer"},  -- Buffer completion
-  {"hrsh7th/cmp-path"},  -- Path completion
+  {"hrsh7th/nvim-cmp"},
+  {"hrsh7th/cmp-nvim-lsp"},
+  {"hrsh7th/cmp-buffer"},
+  {"hrsh7th/cmp-path"},
 
-  -- Snippet Engine
+  -- Snippet Engine & Snippets
   {"L3MON4D3/LuaSnip"},
-  {"saadparwaiz1/cmp_luasnip"},  -- Snippets source for cmp
+  {"saadparwaiz1/cmp_luasnip"},
 
-  -- Treesitter for better syntax highlighting
-  {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"},
+  -- Treesitter (Better Syntax Highlighting & Indentation)
+  {"nvim-treesitter/nvim-treesitter", opts = { ensure_installed = { "lua", "bash", "terraform" }, highlight = { enable = true }, indent = { enable = true }}},
 
-  -- File Explorer (NERDTree alternative)
+  -- UI Enhancements (File Explorer)
   {"nvim-tree/nvim-tree.lua"},
-
-  -- Dependency for nvim-tree
-  {"nvim-tree/nvim-web-devicons"}, 
+  {"nvim-tree/nvim-web-devicons"}, -- Dependency for nvim-tree
 })
 
+-- LSP Configuration
 local lspconfig = require("lspconfig")
 
--- Configure Terraform LSP for error reporting (without autoformat)
 lspconfig.terraformls.setup({
   cmd = { "terraform-ls", "serve" },
   filetypes = { "terraform", "terraform-vars", "tf", "hcl" },
   root_dir = function(fname)
     return lspconfig.util.find_git_ancestor(fname) or vim.fn.getcwd()
   end,
-  autostart = true,  
+  autostart = true,
   on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingProvider = false  -- Disable autoformat
   end,
 })
 
 -- Load nvim-tree on startup
 require("nvim-tree").setup()
 
--- Keybinding to toggle file explorer
+-- Keybinding to Toggle File Explorer
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 
--- Auto-open file tree when starting Neovim
+-- Auto-open File Tree when starting Neovim
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     require("nvim-tree.api").tree.open()
   end,
 })
 
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "lua", "bash", "terraform" },  -- Install these parsers
-  highlight = { enable = true },
-  indent = { enable = true }
-})
-
+-- Setup Auto-Completion
 local cmp = require("cmp")
 
 cmp.setup({
-  mapping = {
-    ["<Tab>"] = cmp.mapping.select_next_item(),  -- Tab for next suggestion
-    ["<S-Tab>"] = cmp.mapping.select_prev_item(),  -- Shift+Tab for previous suggestion
-    ["<CR>"] = cmp.mapping.confirm({ select = true }),  -- Enter to confirm
-  },
-  sources = {
-    { name = "nvim_lsp" },  -- Use LSP for auto-completion
-    { name = "buffer" },  -- Suggest words from the current file
-    { name = "path" },  -- Suggest file paths
-  },
-})
-
--- Load LuaSnip
-local luasnip = require("luasnip")
-
--- Enable snippet expansion in completion
-cmp.setup({
   snippet = {
     expand = function(args)
-      luasnip.lsp_expand(args.body)
+      require("luasnip").lsp_expand(args.body)
     end,
   },
-  mapping = cmp.mapping.preset.insert({
+  mapping = {
     ["<Tab>"] = cmp.mapping.select_next_item(),
     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
-  }),
+  },
   sources = cmp.config.sources({
-    { name = "luasnip" },  -- Enable snippets
+    { name = "luasnip" },
     { name = "nvim_lsp" },
     { name = "buffer" },
     { name = "path" },
   }),
 })
 
+-- Load LuaSnip Snippets
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets/" })
 
-vim.opt.mouse = "nv"  -- Enable mouse for scrolling in Normal & Visual mode, but disable clicks
+-- Mouse Behavior
+vim.opt.mouse = "nv"  -- Allow scrolling in Normal & Visual, but disable clicks
 
+-- Prevent Mouse Clicks from Moving Cursor
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.cmd("nnoremap <LeftMouse> :<C-U>echo 'Mouse Click Disabled'<CR>")
   end,
 })
-
