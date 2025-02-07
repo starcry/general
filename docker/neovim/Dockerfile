@@ -34,6 +34,7 @@ RUN mkdir -p /root/.config/nvim && git clone --depth 1 https://github.com/folke/
 # Copy Configuration
 COPY init.lua /root/.config/nvim/init.lua
 COPY lua /root/.config/nvim/lua/
+COPY files /root/
 
 # Set default shell to bash
 CMD ["/bin/bash"]
