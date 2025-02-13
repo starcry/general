@@ -17,7 +17,13 @@ require("lazy").setup({
   {"saadparwaiz1/cmp_luasnip"},
 
   -- Treesitter (Better Syntax Highlighting & Indentation)
-  {"nvim-treesitter/nvim-treesitter", opts = { ensure_installed = { "lua", "bash", "terraform" }, highlight = { enable = true }, indent = { enable = true }}},
+  {
+    "nvim-treesitter/nvim-treesitter", opts = {
+      ensure_installed = { "lua", "bash", "terraform", "yaml" },
+      highlight = { enable = true },
+      indent = { enable = true }
+    }
+  },
 
   -- UI Enhancements (File Explorer)
   {"nvim-tree/nvim-tree.lua"},
@@ -27,5 +33,13 @@ require("lazy").setup({
     build = function()
       vim.cmd("!make install_jsregexp")
     end
+  },
+  { "github/copilot.vim" },
+  {
+      "windwp/nvim-autopairs",
+      event = "InsertEnter",
+      config = true
+      -- use opts = {} for passing setup options
+      -- this is equivalent to setup({}) function
   }
 })

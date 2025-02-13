@@ -8,6 +8,7 @@ require("lsp")
 require("keymaps")
 require("settings")
 require("ui")
+require("copilot")
 
 
 
@@ -31,6 +32,7 @@ cmp.setup({
     { name = "nvim_lsp" },
     { name = "buffer" },
     { name = "path" },
+    { name = "cmdline" }, -- Enables autocompletion for shell commands
   }),
 })
 
