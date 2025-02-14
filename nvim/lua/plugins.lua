@@ -57,12 +57,25 @@ require("lazy").setup({
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
+  {
+  "towolf/vim-helm", ft = "helm"  -- Helm syntax highlighting
+  },
+  {
+    "neovim/nvim-lspconfig"  -- LSP configurations
   }
+
 })
 
 require('lualine').setup({
   sections = {
     lualine_c = { { 'filename', path = 2 } } -- 1 = Relative Path, 2 = Absolute Path
   }
+})
+
+require("nvim-treesitter.configs").setup({
+  ensure_installed = { "yaml", "json", "bash" },
+  highlight = { enable = true },
+  indent = { enable = true },
 })
 

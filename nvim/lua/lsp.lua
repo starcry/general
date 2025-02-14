@@ -2,6 +2,20 @@
 local lspconfig = require("lspconfig")
 local util = require("lspconfig.util")
 
+require("lspconfig").yamlls.setup({
+  settings = {
+    yaml = {
+      schemas = {
+        kubernetes = "/*.yaml",  -- Auto-detect Kubernetes YAML files
+      },
+      validate = true,  -- Enable real-time validation
+      completion = true, -- Enable auto-completion
+      hover = true, -- Show hover info for YAML properties
+    },
+  },
+})
+
+
 lspconfig.terraformls.setup({
   cmd = { "terraform-ls", "serve" },
   filetypes = { "terraform", "terraform-vars", "tf", "hcl" },
@@ -67,3 +81,18 @@ lspconfig.dockerls.setup({
   root_dir = lspconfig.util.root_pattern("Dockerfile"),
   single_file_support = true,
 })
+
+-- Setup Helm LS
+lspconfig.helm_ls.setup {
+  filetypes = { "helm" },
+  settings = {
+    ['helm-ls'] = {
+      yamlls = {
+        path = "yaml-language-server", -- Ensure yaml-language-server is used
+      }
+    }
+  }
+}
+
+-- Setup YAML LS (if not already configured)
+lspconfig.yamlls.setup({})
