@@ -19,7 +19,7 @@ require("lazy").setup({
   -- Treesitter (Better Syntax Highlighting & Indentation)
   {
     "nvim-treesitter/nvim-treesitter", opts = {
-      ensure_installed = { "lua", "bash", "terraform", "yaml" },
+      ensure_installed = { "lua", "bash", "terraform", "yaml", "dockerfile" },
       highlight = { enable = true },
       indent = { enable = true }
     }
@@ -41,5 +41,17 @@ require("lazy").setup({
       config = true
       -- use opts = {} for passing setup options
       -- this is equivalent to setup({}) function
+  },
+  {
+    'rmagatti/auto-session',
+    lazy = false,
+
+    ---enables autocomplete for opts
+    ---@module "auto-session"
+    ---@type AutoSession.Config
+    opts = {
+      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
+      -- log_level = 'debug',
+    }
   }
 })
