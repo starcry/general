@@ -53,5 +53,16 @@ require("lazy").setup({
       suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
       -- log_level = 'debug',
     }
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
   }
 })
+
+require('lualine').setup({
+  sections = {
+    lualine_c = { { 'filename', path = 2 } } -- 1 = Relative Path, 2 = Absolute Path
+  }
+})
+

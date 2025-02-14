@@ -39,8 +39,12 @@ cmp.setup({
 -- Load LuaSnip Snippets
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets/" })
 
+--vim.o.statusline = "%F %m %r %h %w [%{&fileformat}] [%{&fileencoding}] [%Y] [%p%%]"
+-- Show a red vertical line at column 80
+vim.o.colorcolumn = "80"
 
-----------------------------------------------------------------------------------------
+-- Highlight the cursor line and cursor column
+vim.o.cursorline = true
+vim.o.cursorcolumn = true
 
 
-----------------------------------------------------------------------------------------
