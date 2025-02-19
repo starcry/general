@@ -6,15 +6,15 @@ require("lazy").setup({
   -- Terraform Language Server & Syntax Highlighting
   {"hashivim/vim-terraform"},
 
-  -- Autocompletion
-  {"hrsh7th/nvim-cmp"},
-  {"hrsh7th/cmp-nvim-lsp"},
-  {"hrsh7th/cmp-buffer"},
-  {"hrsh7th/cmp-path"},
+--  -- Autocompletion
+--  {"hrsh7th/nvim-cmp"},
+--  {"hrsh7th/cmp-nvim-lsp"},
+--  {"hrsh7th/cmp-buffer"},
+--  {"hrsh7th/cmp-path"},
 
   -- Snippet Engine & Snippets
-  {"L3MON4D3/LuaSnip"},
-  {"saadparwaiz1/cmp_luasnip"},
+--  {"L3MON4D3/LuaSnip"},
+--  {"saadparwaiz1/cmp_luasnip"},
 
   -- Treesitter (Better Syntax Highlighting & Indentation)
   {
@@ -28,6 +28,7 @@ require("lazy").setup({
   -- UI Enhancements (File Explorer)
   {"nvim-tree/nvim-tree.lua"},
   {"nvim-tree/nvim-web-devicons"}, -- Dependency for nvim-tree
+  { "nvim-treesitter/playground" },
   {
     "L3MON4D3/LuaSnip",
     build = function()
@@ -63,8 +64,13 @@ require("lazy").setup({
   },
   {
     "neovim/nvim-lspconfig"  -- LSP configurations
-  }
-
+  },
+--  {
+--    "zbirenbaum/copilot-cmp",
+--    config = function ()
+--      require("copilot_cmp").setup()
+--    end
+--  }
 })
 
 require('lualine').setup({
