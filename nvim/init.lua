@@ -7,6 +7,17 @@ vim.g.copilot_mode = "cmp"
 -- "native"   => official GitHub Copilot (github/copilot.vim) with inline suggestions
 -- "cmp"      => Copilot via cmp (zbirenbaum/copilot.lua + copilot-cmp)
 
+local valid_modes = {
+  disabled = true,
+  native   = true,
+  cmp      = true,
+}
+
+if not valid_modes[vim.g.copilot_mode] then
+  error("Invalid copilot_mode: " .. vim.g.copilot_mode ..
+        ". Valid options are: 'disabled', 'native', or 'cmp'.")
+end
+
 
 -- Bootstrap Lazy.nvim
 require("bootstrap")
