@@ -1,7 +1,12 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.g.enable_copilot = false
+vim.g.copilot_mode = "cmp"
+-- Possible values:
+-- "disabled" => no Copilot at all; only nvim-cmp with LSP
+-- "native"   => official GitHub Copilot (github/copilot.vim) with inline suggestions
+-- "cmp"      => Copilot via cmp (zbirenbaum/copilot.lua + copilot-cmp)
+
 
 -- Bootstrap Lazy.nvim
 require("bootstrap")
@@ -10,7 +15,7 @@ require("lsp")
 require("keymaps")
 require("settings")
 require("ui")
-require("copilot")
+require("copilot_native")
 require("treesitter")
 
 
