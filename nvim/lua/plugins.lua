@@ -7,6 +7,42 @@ require("lazy").setup({
   {"hashivim/vim-terraform"},
 
 --  -- Autocompletion
+  {
+    "hrsh7th/nvim-cmp",
+    enabled = function()
+      -- Toggle logic: If Copilot is disabled, we want full CMP
+      return not vim.g.enable_copilot
+    end,
+    dependencies = {
+      { "hrsh7th/cmp-nvim-lsp",   enabled = function() return not vim.g.enable_copilot end },
+      { "hrsh7th/cmp-buffer",     enabled = function() return not vim.g.enable_copilot end },
+      { "hrsh7th/cmp-path",       enabled = function() return not vim.g.enable_copilot end },
+      { "saadparwaiz1/cmp_luasnip", enabled = function() return not vim.g.enable_copilot end },
+      { "L3MON4D3/LuaSnip" }, -- you can keep LuaSnip around all the time if you want
+    },
+    config = function()
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+      cmp.setup({
+        snippet = {
+          expand = function(args) luasnip.lsp_expand(args.body) end,
+        },
+        mapping = {
+          ["<Tab>"] = cmp.mapping.select_next_item(),
+          ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        },
+        sources = cmp.config.sources({
+          { name = "luasnip" },
+          { name = "nvim_lsp" },
+          { name = "buffer" },
+          { name = "path" },
+          { name = "cmdline" },
+        }),
+      })
+    end
+  },
+
 --  {"hrsh7th/nvim-cmp"},
 --  {"hrsh7th/cmp-nvim-lsp"},
 --  {"hrsh7th/cmp-buffer"},
@@ -26,7 +62,11 @@ require("lazy").setup({
   },
 
   -- UI Enhancements (File Explorer)
-  {"nvim-tree/nvim-tree.lua"},
+--  {"nvim-tree/nvim-tree.lua"},
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
   {"nvim-tree/nvim-web-devicons"}, -- Dependency for nvim-tree
   { "nvim-treesitter/playground" },
   {
@@ -35,7 +75,13 @@ require("lazy").setup({
       vim.cmd("!make install_jsregexp")
     end
   },
-  { "github/copilot.vim" },
+--  { "github/copilot.vim" },
+  {
+    "github/copilot.vim",
+    enabled = function()
+      return vim.g.enable_copilot
+    end
+  },
   {
       "windwp/nvim-autopairs",
       event = "InsertEnter",
@@ -55,9 +101,20 @@ require("lazy").setup({
       -- log_level = 'debug',
     }
   },
+--  {
+--    'nvim-lualine/lualine.nvim',
+--    dependencies = { 'nvim-tree/nvim-web-devicons' }
+--  },
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' }
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup({
+        sections = {
+          lualine_c = { { 'filename', path = 2 } }
+        }
+      })
+    end
   },
   {
   "towolf/vim-helm", ft = "helm"  -- Helm syntax highlighting

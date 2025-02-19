@@ -1,6 +1,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+vim.g.enable_copilot = false
+
 -- Bootstrap Lazy.nvim
 require("bootstrap")
 require("plugins")
