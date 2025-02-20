@@ -1,7 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.g.copilot_mode = "cmp"
+vim.g.copilot_mode = "both"
 -- Possible values:
 -- "disabled" => no Copilot at all; only nvim-cmp with LSP
 -- "native"   => official GitHub Copilot (github/copilot.vim) with inline suggestions
@@ -11,11 +11,12 @@ local valid_modes = {
   disabled = true,
   native   = true,
   cmp      = true,
+  both     = true,
 }
 
 if not valid_modes[vim.g.copilot_mode] then
   error("Invalid copilot_mode: " .. vim.g.copilot_mode ..
-        ". Valid options are: 'disabled', 'native', or 'cmp'.")
+        ". Valid options are: 'disabled', 'native', 'both' or 'cmp'.")
 end
 
 

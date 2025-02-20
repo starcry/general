@@ -127,7 +127,20 @@ require("lazy").setup({
   {
     "github/copilot.vim",
     enabled = function()
-      return vim.g.copilot_mode == "native"
+      return vim.g.copilot_mode == "native" or (vim.g.copilot_mode == "both")
+    end,
+    config = function()
+      -- OPTIONAL: override the default Copilot <Tab> acceptance
+      -- so it doesn’t conflict with nvim-cmp
+      vim.g.copilot_no_tab_map = true
+      vim.api.nvim_set_keymap(
+        "i",
+        "<C-l>",
+        'copilot#Accept("<CR>")',
+        { silent = true, expr = true, noremap = true }
+      )
+      -- Now inline Copilot suggestions accept with <C-l>
+      -- and won't steal <Tab> from nvim-cmp
     end
   },
   {
