@@ -1,4 +1,3 @@
-```md
 # Neovim Configuration with Multiple Copilot Modes & LSP
 
 This Neovim configuration provides a flexible setup for multiple Copilot modes, integrated LSP servers (for Terraform, Ansible, Bash, Docker, YAML, etc.), Treesitter, snippet support, and more—using [Lazy.nvim](https://github.com/folke/lazy.nvim) for plugin management.
