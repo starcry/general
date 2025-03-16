@@ -44,5 +44,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Type Definitions & Symbols
     vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts) -- Go to type definition
+
+		-- Debugging
+		vim.keymap.set('n', '<F5>', function() require('dap').continue() end, opts)
+		vim.keymap.set('n', '<F10>', function() require('dap').step_over() end, opts)
+		vim.keymap.set('n', '<F11>', function() require('dap').step_into() end, opts)
+		vim.keymap.set('n', '<F12>', function() require('dap').step_out() end, opts)
+		vim.keymap.set('n', '<leader>b', function() require('dap').toggle_breakpoint() end, opts)
+		vim.keymap.set('n', '<leader>B', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, opts)
+
   end,
 })
