@@ -10,3 +10,12 @@ vim.g.python3_host_prog = "/opt/venv/bin/python"
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 
+-- Enable line numbers
+vim.opt.number = true
+
+-- Disable text wrapping
+vim.opt.wrap = false
+
+-- Make line numbers brighter
+vim.cmd("highlight LineNr guifg=#00ffdc")  -- Adjust color to your preference
+

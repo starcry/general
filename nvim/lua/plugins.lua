@@ -215,7 +215,51 @@ require("lazy").setup({
     config = function ()
       require("copilot_cmp").setup()
     end
-  }
+  },
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = { "rcarriga/nvim-dap-ui", "jay-babu/mason-nvim-dap.nvim" },
+    config = function()
+      local dap = require("dap")
+
+      dap.adapters.coreclr = {
+        type = "executable",
+        command = "netcoredbg",
+        args = { "--interpreter=vscode" }
+      }
+
+      dap.configurations.cs = {
+        {
+          type = "coreclr",
+          request = "launch",
+          name = "Launch",
+          program = function()
+            return vim.fn.input('Path to DLL: ', vim.fn.getcwd() .. '/bin/Debug/net7.0/', 'file')
+          end,
+        }
+      }
+    end
+  },
+	{"b0o/schemastore.nvim"},
+  {
+    "williamboman/mason.nvim",
+    build = ":MasonUpdate", -- This will update mason when you run :Lazy sync
+    config = function()
+      require("mason").setup({
+        -- (optional) custom mason settings here
+      })
+    end
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+    config = function()
+      require("mason-lspconfig").setup({
+				ensure_installed = { "omnisharp", "bashls", "jsonls" },
+				automatic_installation = true,
+      })
+    end
+  },
 })
 
 require('lualine').setup({

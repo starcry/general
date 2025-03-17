@@ -95,4 +95,69 @@ lspconfig.helm_ls.setup {
 }
 
 -- Setup YAML LS (if not already configured)
-lspconfig.yamlls.setup({})
+lspconfig.yamlls.setup({
+  cmd = { "yaml-language-server", "--stdio" },
+  filetypes = { "yaml", "yml" },
+  settings = {
+    yaml = {
+      schemas = {
+        kubernetes = "*.yaml",
+      },
+      validate = true,
+      completion = true,
+      hover = true,
+    },
+  },
+})
+
+-- ✅ C# LSP
+--lspconfig.csharp_ls.setup({
+--  cmd = { "csharp-ls" },
+--  filetypes = { "cs" },
+--  root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
+----  root_dir = require("lspconfig.util").root_pattern("*.sln", "*.csproj", ".git"),
+--})
+
+
+-- [OPTION B] omnisharp
+require("lspconfig").omnisharp.setup({
+  -- If installed via package manager or Mason:
+  -- cmd = { "omnisharp" },
+	cmd = {
+		-- Use the path from :Mason if needed (e.g. "~/.local/share/nvim/mason/bin/omnisharp")
+		"omnisharp",
+		"--languageserver",
+		"--hostPID",
+		tostring(vim.fn.getpid()),
+	},
+  -- Or full path to the OmniSharp executable, e.g.:
+  -- cmd = { "/path/to/omnisharp/OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
+
+  filetypes = { "cs" },
+  root_dir = require("lspconfig.util").root_pattern("*.sln", "*.csproj", ".git"),
+
+  -- Additional OmniSharp-specific settings
+  enable_editorconfig_support = true,
+  enable_roslyn_analyzers = true,
+  enable_import_completion = true,
+  -- ...
+})
+
+-- ✅ PowerShell LSP
+lspconfig.powershell_es.setup({
+  bundle_path = vim.fn.expand("$HOME/.local/share/nvim/mason/packages/powershell-editor-services"),
+  shell = "pwsh",
+  filetypes = { "ps1", "psm1" },
+})
+
+-- ✅ JSON LSP
+lspconfig.jsonls.setup({
+  cmd = { "vscode-json-language-server", "--stdio" },
+  filetypes = { "json", "jsonc" },
+  settings = {
+    json = {
+      schemas = require('schemastore').json.schemas(),
+      validate = { enable = true },
+    },
+  },
+})

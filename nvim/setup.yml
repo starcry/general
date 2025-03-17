@@ -1,0 +1,94 @@
+---
+- name: Setup Neovim with Lua configs and plugins
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars:
+    nvim_config_dir: "{{ ansible_env.HOME }}/.config/nvim"
+    nvm_version: "v0.40.2"
+    node_version: "22"
+
+  tasks:
+    - name: Ensure Ansible Galaxy collections are installed
+      ansible.builtin.command: ansible-galaxy collection install -r requirements.yml
+      args:
+        chdir: "{{ playbook_dir }}"
+      changed_when: false
+
+    - name: Install Neovim (Ubuntu/Debian example)
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - curl
+          - build-essential
+          - ripgrep
+          - npm
+          - python3
+          - python3-pip
+          - python3-venv
+          - luarocks
+        state: present
+        update_cache: true
+
+    - name: Download and install NVM
+      ansible.builtin.shell: >
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+    - name: Load NVM environment
+      ansible.builtin.shell: >
+        . {{ ansible_env.HOME }}/.nvm/nvm.sh
+      args:
+        executable: /bin/bash
+
+    - name: Install Node.js {{ node_version }} using NVM
+      ansible.builtin.shell: >
+        . {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install {{ node_version }}
+      args:
+        executable: /bin/bash
+      changed_when: false
+
+    - name: Install jsregexp via luarocks
+      become: true
+      ansible.builtin.command: luarocks install jsregexp
+      args:
+        creates: "/usr/local/share/lua/5.1/jsregexp.lua"
+
+    - name: Install tree-sitter-cli globally using npm
+      become: true
+      ansible.builtin.command: npm install -g tree-sitter-cli
+      args:
+        creates: /usr/local/bin/tree-sitter
+
+    - name: Ensure config directory exists
+      ansible.builtin.file:
+        path: "{{ nvim_config_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Recursively symlink Lua config directory to Neovim config directory
+      ansible.builtin.file:
+        src: "{{ playbook_dir }}/lua"
+        dest: "{{ nvim_config_dir }}/lua"
+        state: link
+        force: true
+
+    - name: Symlink Lua config files to Neovim config directory
+      ansible.builtin.file:
+        src: "{{ item }}"
+        dest: "{{ nvim_config_dir }}/{{ item | basename }}"
+        state: link
+        force: true
+      loop: "{{ lookup('fileglob', '*.lua', wantlist=True) }}"
+
+    - name: Install packer.nvim plugin manager
+      ansible.builtin.git:
+        repo: "https://github.com/wbthomason/packer.nvim"
+        dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/packer/start/packer.nvim"
+        version: "master"
+
+# sudo apt update; sudo apt upgrade -y; sudo apt install -y unzip python3-pip; python3 -m pip install --user ansible; wget https://github.com/starcry/general/archive/refs/heads/master.zip; wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz; unzip *.zip; tar -xvf nvim-linux-x86_64.tar.gz
+

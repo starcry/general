@@ -1,3 +1,4 @@
+```md
 # Neovim Configuration with Multiple Copilot Modes & LSP
 
 This Neovim configuration provides a flexible setup for multiple Copilot modes, integrated LSP servers (for Terraform, Ansible, Bash, Docker, YAML, etc.), Treesitter, snippet support, and more—using [Lazy.nvim](https://github.com/folke/lazy.nvim) for plugin management.
@@ -52,30 +53,25 @@ This configuration is set up so you can easily **toggle** between different Copi
 
 1. **Install Neovim 0.8+**  
    - Check out [neovim.io](https://neovim.io) or use your system package manager.
-
-2. **Install Required Dependencies** for your LSPs (where applicable):
-   - **Node.js & npm** (for Bash, YAML, Dockerfile, Helm language servers).
-   - **Python3 & pip** (for Ansible language server, ansible-lint).
-   - **Terraform** + [terraform-ls](https://github.com/hashicorp/terraform-ls) if you want Terraform support.
-   - **Luarocks** (optional, if you need `jsregexp` for LuaSnip’s advanced regex).
-
-3. **Clone or Copy** this config into your Neovim folder:
+   - I recommend installing via the website as the ubuntu package is often outdated.
+   - If you are using ubuntu you can run the following commands to install neovim
    ```bash
-   git clone <your-repo-url> ~/.config/nvim
+    sudo apt update
+    sudo apt upgrade -y
+    sudo apt install -y unzip python3-pip
+    python3 -m pip install --user ansible
+    wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+    tar -xvf nvim-linux-x86_64.tar.gz
+    sudo cp nvim-linux-x86_64/bin/nvim /usr/bin/nvim
+    ansible-playbook setup.yml
    ```
-   Make sure files are placed so that:
-   ```
-   ~/.config/nvim/init.lua
-   ~/.config/nvim/lua/...
-   ```
-
-4. **Open Neovim**:
+2. **Open Neovim**:
    ```bash
    nvim
    ```
    Lazy.nvim will prompt to install missing plugins the first time you open Neovim.
 
-5. **Install & Sync Plugins**:
+3. **Install & Sync Plugins**:
    ```vim
    :Lazy sync
    ```
