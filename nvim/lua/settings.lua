@@ -19,3 +19,11 @@ vim.opt.wrap = false
 -- Make line numbers brighter
 vim.cmd("highlight LineNr guifg=#00ffdc")  -- Adjust color to your preference
 
+-- 🧨 Kill all forms of history/caching
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.undofile = false
+vim.opt.shadafile = "NONE"
+vim.opt.directory = "/tmp"  -- If anything leaks, it's gone on reboot
+

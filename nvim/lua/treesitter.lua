@@ -1,5 +1,5 @@
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "c_sharp", "yaml", "dockerfile", "bash", "json" },
+	ensure_installed = { "c_sharp", "yaml", "dockerfile", "bash", "json", "go" },
   highlight = { enable = true },
 	indent = { enable = true },
   playground = {

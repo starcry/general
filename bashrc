@@ -13,7 +13,7 @@ function gaa() {
 }
 #alias gb="git branch | grep \"*\" | cut -d ' ' -f2"
 function gb() {
-  git branch | grep \"*\" | cut -d ' ' -f2
+  git branch | grep '*' | cut -d ' ' -f2
 }
 function gco() {
   local BRANCH=$(gb)

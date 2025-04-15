@@ -103,7 +103,7 @@ require("lazy").setup({
   -- Treesitter (Better Syntax Highlighting & Indentation)
   {
     "nvim-treesitter/nvim-treesitter", opts = {
-      ensure_installed = { "lua", "bash", "terraform", "yaml", "dockerfile" },
+      ensure_installed = { "lua", "bash", "terraform", "yaml", "dockerfile", "go", "json" },
       highlight = { enable = true },
       indent = { enable = true }
     }
@@ -150,18 +150,18 @@ require("lazy").setup({
       -- use opts = {} for passing setup options
       -- this is equivalent to setup({}) function
   },
-  {
-    'rmagatti/auto-session',
-    lazy = false,
-
-    ---enables autocomplete for opts
-    ---@module "auto-session"
-    ---@type AutoSession.Config
-    opts = {
-      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
-      -- log_level = 'debug',
-    }
-  },
+--  {
+--    'rmagatti/auto-session',
+--    lazy = false,
+--
+--    ---enables autocomplete for opts
+--    ---@module "auto-session"
+--    ---@type AutoSession.Config
+--    opts = {
+--      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
+--      -- log_level = 'debug',
+--    }
+--  },
 --  {
 --    'nvim-lualine/lualine.nvim',
 --    dependencies = { 'nvim-tree/nvim-web-devicons' }
@@ -255,7 +255,7 @@ require("lazy").setup({
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-				ensure_installed = { "omnisharp", "bashls", "jsonls" },
+				ensure_installed = { "omnisharp", "bashls", "jsonls", "gopls" },
 				automatic_installation = true,
       })
     end
@@ -269,7 +269,7 @@ require('lualine').setup({
 })
 
 require("nvim-treesitter.configs").setup({
-  ensure_installed = { "yaml", "json", "bash" },
+  ensure_installed = { "yaml", "json", "bash", "go", "lua", "dockerfile", "terraform" },
   highlight = { enable = true },
   indent = { enable = true },
 })
