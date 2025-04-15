@@ -1,5 +1,6 @@
 -- Keybinding to Toggle File Explorer (NvimTree)
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>r", ":NvimTreeRefresh<CR>", { noremap = true, silent = true })
 
 -- Diagnostic Navigation (Floating Window, Previous/Next, List)
 vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float) -- Capital E to avoid conflict with NvimTree

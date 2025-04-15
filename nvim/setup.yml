@@ -91,4 +91,5 @@
         version: "master"
 
 # sudo apt update; sudo apt upgrade -y; sudo apt install -y unzip python3-pip; python3 -m pip install --user ansible; wget https://github.com/starcry/general/archive/refs/heads/master.zip; wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz; unzip *.zip; tar -xvf nvim-linux-x86_64.tar.gz
+# go install golang.org/x/tools/gopls@latest
 

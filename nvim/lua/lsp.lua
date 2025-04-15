@@ -161,3 +161,25 @@ lspconfig.jsonls.setup({
     },
   },
 })
+
+lspconfig.gopls.setup({
+  cmd = { "gopls" },
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },
+  root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+        nilness = true,
+        unusedwrite = true,
+      },
+      staticcheck = true,
+    },
+  },
+})
+
+require("mason-lspconfig").setup({
+  ensure_installed = { "omnisharp", "bashls", "jsonls", "gopls" }, -- ← Add "gopls"
+  automatic_installation = true,
+})
+
