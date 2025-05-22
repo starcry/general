@@ -51,6 +51,13 @@
         executable: /bin/bash
       changed_when: false
 
+    - name: Install typescript and typescript-language-server globally via npm
+      ansible.builtin.shell: >
+        . {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm use {{ node_version }} && npm install -g typescript typescript-language-server
+      args:
+        executable: /bin/bash
+      changed_when: false
+
     - name: Install jsregexp via luarocks
       become: true
       ansible.builtin.command: luarocks install jsregexp

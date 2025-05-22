@@ -73,12 +73,7 @@ require("lazy").setup({
   },
   {"nvim-tree/nvim-web-devicons"}, -- Dependency for nvim-tree
   { "nvim-treesitter/playground" },
-  {
-    "L3MON4D3/LuaSnip",
-    build = function()
-      vim.cmd("!make install_jsregexp")
-    end
-  },
+  { "L3MON4D3/LuaSnip" },
 --  { "github/copilot.vim" },
   {
     "github/copilot.vim",
@@ -190,7 +185,7 @@ require("lazy").setup({
     config = function()
       require("mason-lspconfig").setup({
 				ensure_installed = { "omnisharp", "bashls", "jsonls", "gopls" },
-				automatic_installation = true,
+				automatic_installation = { exclude = {} },
       })
     end
   },

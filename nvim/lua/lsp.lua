@@ -166,8 +166,23 @@ lspconfig.gopls.setup({
   },
 })
 
-require("mason-lspconfig").setup({
-  ensure_installed = { "omnisharp", "bashls", "jsonls", "gopls" }, -- ← Add "gopls"
-  automatic_installation = true,
+-- New TypeScript LSP (replaces tsserver)
+lspconfig.tsserver = nil -- Just in case it's been loaded
+
+lspconfig.ts_ls.setup({
+  cmd = { "typescript-language-server", "--stdio" },
+  filetypes = {
+    "typescript", "typescriptreact", "typescript.tsx",
+    "javascript", "javascriptreact", "javascript.jsx"
+  },
+  root_dir = lspconfig.util.root_pattern("tsconfig.json", "package.json", "jsconfig.json", ".git"),
+  single_file_support = true,
+  init_options = {
+    hostInfo = "neovim",
+  },
 })
 
+require("mason-lspconfig").setup({
+  ensure_installed = { "omnisharp", "bashls", "jsonls", "gopls", "ts_ls" },
+  automatic_installation = { exclude = {} },
+})
