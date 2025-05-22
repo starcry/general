@@ -55,50 +55,6 @@ require("lazy").setup({
       })
     end
   },
---  {
---    "hrsh7th/nvim-cmp",
---    enabled = function()
---      -- Toggle logic: If Copilot is disabled, we want full CMP
---      return not vim.g.enable_copilot
---    end,
---    dependencies = {
---      { "hrsh7th/cmp-nvim-lsp",   enabled = function() return not vim.g.enable_copilot end },
---      { "hrsh7th/cmp-buffer",     enabled = function() return not vim.g.enable_copilot end },
---      { "hrsh7th/cmp-path",       enabled = function() return not vim.g.enable_copilot end },
---      { "saadparwaiz1/cmp_luasnip", enabled = function() return not vim.g.enable_copilot end },
---      { "L3MON4D3/LuaSnip" }, -- you can keep LuaSnip around all the time if you want
---    },
---    config = function()
---      local cmp = require("cmp")
---      local luasnip = require("luasnip")
---      cmp.setup({
---        snippet = {
---          expand = function(args) luasnip.lsp_expand(args.body) end,
---        },
---        mapping = {
---          ["<Tab>"] = cmp.mapping.select_next_item(),
---          ["<S-Tab>"] = cmp.mapping.select_prev_item(),
---          ["<CR>"] = cmp.mapping.confirm({ select = true }),
---        },
---        sources = cmp.config.sources({
---          { name = "luasnip" },
---          { name = "nvim_lsp" },
---          { name = "buffer" },
---          { name = "path" },
---          { name = "cmdline" },
---        }),
---      })
---    end
---  },
-
---  {"hrsh7th/nvim-cmp"},
---  {"hrsh7th/cmp-nvim-lsp"},
---  {"hrsh7th/cmp-buffer"},
---  {"hrsh7th/cmp-path"},
-
-  -- Snippet Engine & Snippets
---  {"L3MON4D3/LuaSnip"},
---  {"saadparwaiz1/cmp_luasnip"},
 
   -- Treesitter (Better Syntax Highlighting & Indentation)
   {
@@ -150,22 +106,6 @@ require("lazy").setup({
       -- use opts = {} for passing setup options
       -- this is equivalent to setup({}) function
   },
---  {
---    'rmagatti/auto-session',
---    lazy = false,
---
---    ---enables autocomplete for opts
---    ---@module "auto-session"
---    ---@type AutoSession.Config
---    opts = {
---      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
---      -- log_level = 'debug',
---    }
---  },
---  {
---    'nvim-lualine/lualine.nvim',
---    dependencies = { 'nvim-tree/nvim-web-devicons' }
---  },
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -183,12 +123,6 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig"  -- LSP configurations
   },
---  {
---    "zbirenbaum/copilot-cmp",
---    config = function ()
---      require("copilot_cmp").setup()
---    end
---  }
 
   -- 2. zbirenbaum/copilot.lua (the alternative Copilot client)
   {

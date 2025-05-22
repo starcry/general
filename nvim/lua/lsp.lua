@@ -34,9 +34,6 @@ lspconfig.terraformls.setup({
       fullValidation = true  -- 🚀 Extra attempt to ensure full diagnostics
     }
   }
---  on_attach = function(client, bufnr)
---    client.server_capabilities.documentFormattingProvider = false  -- Disable autoformat
---  end,
 })
 
 lspconfig.bashls.setup({
@@ -109,15 +106,6 @@ lspconfig.yamlls.setup({
     },
   },
 })
-
--- ✅ C# LSP
---lspconfig.csharp_ls.setup({
---  cmd = { "csharp-ls" },
---  filetypes = { "cs" },
---  root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
-----  root_dir = require("lspconfig.util").root_pattern("*.sln", "*.csproj", ".git"),
---})
-
 
 -- [OPTION B] omnisharp
 require("lspconfig").omnisharp.setup({
