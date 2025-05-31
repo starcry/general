@@ -8,6 +8,7 @@
     nvim_config_dir: "{{ ansible_env.HOME }}/.config/nvim"
     nvm_version: "v0.40.2"
     node_version: "22"
+    lazy_path: "{{ ansible_env.HOME }}/.local/share/nvim/lazy/lazy.nvim"
 
   tasks:
     - name: Ensure Ansible Galaxy collections are installed
@@ -37,6 +38,20 @@
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh | bash
       args:
         creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+    - name: Ensure parent directory exists
+      file:
+        path: "{{ lazy_path | dirname }}"
+        state: directory
+        mode: "0755"
+
+    - name: Clone lazy.nvim repository
+      git:
+        repo: "{{ lazy_repo }}"
+        dest: "{{ lazy_path }}"
+        version: "stable"
+        depth: 1
+        update: yes
 
     - name: Load NVM environment
       ansible.builtin.shell: >
