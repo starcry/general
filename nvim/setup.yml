@@ -8,6 +8,7 @@
     nvim_config_dir: "{{ ansible_env.HOME }}/.config/nvim"
     nvm_version: "v0.40.2"
     node_version: "22"
+    lazy_repo: "https://github.com/folke/lazy.nvim.git"
     lazy_path: "{{ ansible_env.HOME }}/.local/share/nvim/lazy/lazy.nvim"
 
   tasks:
