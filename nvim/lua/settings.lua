@@ -27,3 +27,17 @@ vim.opt.undofile = false
 vim.opt.shadafile = "NONE"
 vim.opt.directory = "/tmp"  -- If anything leaks, it's gone on reboot
 
+-- 🔍 Show trailing whitespace
+vim.opt.list = true
+vim.opt.listchars:append({ trail = "·" })
+
+-- Optional: visually highlight trailing whitespace too (even if invisible chars are off)
+vim.cmd [[highlight ExtraWhitespace ctermbg=red guibg=red]]
+
+-- Automatically apply that highlight to all open buffers
+vim.api.nvim_create_autocmd({ "BufWinEnter", "BufReadPost" }, {
+  pattern = "*",
+  callback = function()
+    vim.cmd [[match ExtraWhitespace /\s\+$/]]
+  end,
+})

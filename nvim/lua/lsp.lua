@@ -25,16 +25,42 @@ lspconfig.terraformls.setup({
   autostart = true,
   init_options = {
     experimentalFeatures = {
-      validation = true,
-      validateOnSave = true,
-      fullValidation = true  -- 🚀 Try forcing Terraform LSP to return all errors
+--      validation = true,
+--      validateOnSave = true,
+--      fullValidation = true  -- 🚀 Try forcing Terraform LSP to return all errors
+      validateOnSave = true
     },
-    diagnostics = {
-      validateOnSave = true,
-      fullValidation = true  -- 🚀 Extra attempt to ensure full diagnostics
-    }
+--    diagnostics = {
+--      validateOnSave = true,
+--      fullValidation = true  -- 🚀 Extra attempt to ensure full diagnostics
+--    }
   }
 })
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = { "*.tf", "*.tfvars" },
+  callback = function()
+    --local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    for _, client in ipairs(clients) do
+      if client.name == "terraformls" then
+        -- Trigger formatting (if supported)
+        pcall(function() vim.lsp.buf.format({ async = true }) end)
+
+        -- Trigger validation via a code action
+        pcall(function()
+          vim.lsp.buf.code_action({
+            context = { only = { "source.validate" } },
+            apply = true,
+          })
+        end)
+
+        break
+      end
+    end
+  end,
+})
+
 
 lspconfig.bashls.setup({
   cmd = { "bash-language-server", "start" },

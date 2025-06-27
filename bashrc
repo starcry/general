@@ -285,7 +285,7 @@ function cdr() {
 PS1="[\$(date +%k:%M)] $(echo $PS1 | sed 's/..$//')\$(parse_git_branch)\[\033[00m\]$ "
 
 function tflog() {
-  export TF_LOG=DEBUG
+  export TF_LOG=TRACE
   export TF_LOG_PATH=$(pwd)/log.log
 }
 

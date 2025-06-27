@@ -53,6 +53,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 		vim.keymap.set('n', '<F12>', function() require('dap').step_out() end, opts)
 		vim.keymap.set('n', '<leader>b', function() require('dap').toggle_breakpoint() end, opts)
 		vim.keymap.set('n', '<leader>B', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, opts)
+    -- Trailing space shortcuts
+    vim.keymap.set("n", "]t", "/\\s\\+$<CR>", { desc = "Next trailing space" })
+    vim.keymap.set("n", "[t", "?\\s\\+$<CR>", { desc = "Previous trailing space" })
+    vim.keymap.set("n", "<leader>tl", [[:s/\s\+$//<CR>]], { desc = "Trim trailing spaces (line)" })
+    vim.keymap.set("n", "<leader>tf", [[:%s/\s\+$//e<CR>]], { desc = "Trim trailing spaces (file)" })
+
 
   end,
 })

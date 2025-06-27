@@ -1,5 +1,27 @@
 -- Plugin Management (Lazy.nvim)
 require("lazy").setup({
+  {
+    "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" }, -- Load lazily
+    config = function()
+      require("gitsigns").setup({
+        current_line_blame = true,
+        current_line_blame_opts = {
+          delay = 1000,
+          virt_text_pos = "eol",
+        },
+        current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+      })
+
+      -- Keybinding: show full git blame info for the current line
+      vim.keymap.set("n", "<leader>gb", function()
+        require("gitsigns").blame_line({ full = true })
+      end, { desc = "Git Blame Line" })
+
+      -- Optional: toggle inline blame
+      vim.keymap.set("n", "<leader>tb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Toggle Git Blame" })
+    end,
+  },
   -- LSP Support
   {"neovim/nvim-lspconfig"},
 
@@ -202,4 +224,3 @@ require("nvim-treesitter.configs").setup({
   highlight = { enable = true },
   indent = { enable = true },
 })
-
