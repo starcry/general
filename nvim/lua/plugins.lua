@@ -191,7 +191,7 @@ require("lazy").setup({
       }
     end
   },
-	{"b0o/schemastore.nvim"},
+  {"b0o/schemastore.nvim"},
   {
     "williamboman/mason.nvim",
     build = ":MasonUpdate", -- This will update mason when you run :Lazy sync
@@ -206,10 +206,37 @@ require("lazy").setup({
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-				ensure_installed = { "omnisharp", "bashls", "jsonls", "gopls" },
-				automatic_installation = { exclude = {} },
+        ensure_installed = { "omnisharp", "bashls", "jsonls", "gopls" },
+        automatic_installation = { exclude = {} },
       })
     end
+  },
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    config = true
+  },
+  {
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.8',
+    dependencies = { 'nvim-lua/plenary.nvim' }
+  },
+  {
+    "sindrets/diffview.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("diffview").setup({
+        enhanced_diff_hl = true,
+        view = {
+          merge_tool = {
+            layout = "diff3_mixed", -- or "diff3_vertical" if you prefer side-by-side
+            disable_diagnostics = true, -- turn off LSP warnings in merge view
+          },
+        },
+      })
+    end,
   },
 })
 

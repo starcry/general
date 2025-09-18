@@ -378,3 +378,19 @@ complete -C aws_completer aws
 
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
+
+flash_screen() {
+  printf "\033[?5h"; sleep 0.1; printf "\033[?5l"
+}
+
+flash_screen() {
+  tput civis       # Hide cursor
+  printf "\033[?5h" # Invert screen
+  sleep 0.2
+  printf "\033[?5l" # Restore normal
+  tput cnorm       # Show cursor
+}
+
+#set -o vi
+
+alias whatismyip="dig +short myip.opendns.com @resolver1.opendns.com"

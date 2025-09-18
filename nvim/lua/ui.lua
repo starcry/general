@@ -10,6 +10,12 @@ require("nvim-tree").setup({
   filesystem_watchers = {
     enable = true,
   },
+  filters = {
+    dotfiles = false, -- Show dotfiles
+    custom = {}, -- Disable custom filters
+    exclude = {}, -- No exclusions
+    git_ignored = false, -- Show files ignored by Git
+  },
 })
 
 

@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: debian
+  name: ubuntu
   labels:
-    app: debian
+    app: ubuntu
 spec:
   containers:
-  - image: debian
+  - image: docker.io/ubuntu:22.04
     command:
       - "sleep"
       - "604800"
     imagePullPolicy: Always
-    name: debian
+    name: ubuntu
   restartPolicy: Always
 

@@ -1,3 +1,36 @@
+-- enter conflict resolution mode
+vim.keymap.set("n", "<leader>gi", ":DiffviewOpen<CR>", { desc = "Open Git diff view" })
+-- Take "ours" for current conflict
+vim.keymap.set("n", "<leader>go", ":diffget //2<CR>", { desc = "Take ours" })
+-- Take "theirs" for current conflict
+vim.keymap.set("n", "<leader>gt", ":diffget //3<CR>", { desc = "Take theirs" })
+-- Delete entire conflict
+-- Delete the whole conflict region under the cursor
+vim.keymap.set("n", "<leader>gd", function()
+  local start_pat = "^<<<<<<<"
+  local mid_pat   = "^======="
+  local end_pat   = "^>>>>>>>"
+
+  -- Find the start of the conflict (searching upwards)
+  local start = vim.fn.search(start_pat, "bnW")
+  if start == 0 then
+    vim.notify("No conflict start found above cursor", vim.log.levels.WARN)
+    return
+  end
+
+  -- Find the end of the conflict (searching downwards)
+  local finish = vim.fn.search(end_pat, "nW")
+  if finish == 0 then
+    vim.notify("No conflict end found below cursor", vim.log.levels.WARN)
+    return
+  end
+
+  -- Delete everything between start and finish (inclusive)
+  vim.api.nvim_buf_set_lines(0, start - 1, finish, false, {})
+
+  vim.notify("Conflict region deleted", vim.log.levels.INFO)
+end, { desc = "Delete merge conflict region" })
+
 -- Keybinding to Toggle File Explorer (NvimTree)
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>r", ":NvimTreeRefresh<CR>", { noremap = true, silent = true })
@@ -7,6 +40,18 @@ vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float) -- Capital E to avoi
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev) -- Jump to previous diagnostic
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next) -- Jump to next diagnostic
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist) -- Add diagnostics to location list
+
+-- Yank to system clipboard
+vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
+vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to system clipboard" })
+
+-- Cut (delete) to system clipboard
+vim.keymap.set({ "n", "x" }, "<leader>d", '"+d', { desc = "Cut to system clipboard" })
+vim.keymap.set("n", "<leader>D", '"+D', { desc = "Cut line to system clipboard" })
+
+-- Paste from system clipboard
+vim.keymap.set({ "n", "x" }, "<leader>p", '"+p', { desc = "Paste from system clipboard (after cursor)" })
+vim.keymap.set({ "n", "x" }, "<leader>P", '"+P', { desc = "Paste from system clipboard (before cursor)" })
 
 -- Prevent Mouse Clicks from Moving Cursor
 vim.api.nvim_create_autocmd("VimEnter", {
@@ -62,3 +107,4 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
   end,
 })
+

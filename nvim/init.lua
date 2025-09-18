@@ -29,6 +29,7 @@ require("settings")
 require("ui")
 require("copilot_native")
 require("treesitter")
+require("git")
 
 
 
