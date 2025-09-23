@@ -1,3 +1,41 @@
+-- Show KEYMAPS.md in a centered floating window
+local function show_keymaps_float()
+  local readme = vim.fn.stdpath("config") .. "/KEYMAPS.md"
+  if vim.fn.filereadable(readme) == 0 then
+    vim.notify("KEYMAPS.md not found at " .. readme, vim.log.levels.ERROR)
+    return
+  end
+
+  local lines = vim.fn.readfile(readme)
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.bo[buf].filetype = "markdown"
+  vim.bo[buf].modifiable = false
+
+  local ui = vim.api.nvim_list_uis()[1]
+  local width  = math.floor(ui.width * 0.6)
+  local height = math.floor(ui.height * 0.7)
+  local row    = math.floor((ui.height - height) / 2)
+  local col    = math.floor((ui.width - width) / 2)
+
+  local win = vim.api.nvim_open_win(buf, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    row = row,
+    col = col,
+    border = "rounded",
+    title = " Keymaps ",
+    title_pos = "center",
+  })
+
+  -- quick close with q or <Esc>
+  vim.keymap.set("n", "q", function() pcall(vim.api.nvim_win_close, win, true) end, { buffer = buf, nowait = true })
+  vim.keymap.set("n", "<Esc>", function() pcall(vim.api.nvim_win_close, win, true) end, { buffer = buf, nowait = true })
+end
+
+vim.keymap.set("n", "<leader>h", show_keymaps_float, { desc = "Show Keymaps (float)" })
+
 -- enter conflict resolution mode
 vim.keymap.set("n", "<leader>gi", ":DiffviewOpen<CR>", { desc = "Open Git diff view" })
 -- Take "ours" for current conflict
@@ -44,6 +82,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist) -- Add diagnostics t
 -- Yank to system clipboard
 vim.keymap.set({ "n", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "Yank line to system clipboard" })
+vim.keymap.set("n", "<leader>ya", ":%y+<CR>", { desc = "Yank entire file to system clipboard" })
 
 -- Cut (delete) to system clipboard
 vim.keymap.set({ "n", "x" }, "<leader>d", '"+d', { desc = "Cut to system clipboard" })
