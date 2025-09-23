@@ -379,6 +379,10 @@ complete -C aws_completer aws
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
 
+function fc() {
+	cat $1 | pbcopy
+}
+
 flash_screen() {
   printf "\033[?5h"; sleep 0.1; printf "\033[?5l"
 }
