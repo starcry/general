@@ -398,3 +398,26 @@ flash_screen() {
 #set -o vi
 
 alias whatismyip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+bh() {
+  local file="$HOME/git/general/BASHRC_README.md"
+  [ -f "$file" ] || { echo "README not found: $file" >&2; return 1; }
+
+  local viewer=""
+  if command -v glow >/dev/null 2>&1; then
+    viewer="glow -p \"$file\""
+  elif command -v bat >/dev/null 2>&1; then
+    viewer="bat --paging=always \"$file\""
+  elif command -v batcat >/dev/null 2>&1; then   # Ubuntu’s binary name
+    viewer="batcat --paging=always \"$file\""
+  else
+    viewer="less -R \"$file\""
+  fi
+
+  if [ -n "${TMUX:-}" ] && tmux display-popup -h >/dev/null 2>&1; then
+    tmux display-popup -E -w 80% -h 80% "bash -lc $viewer"
+  else
+    bash -lc "$viewer"
+  fi
+}
+
