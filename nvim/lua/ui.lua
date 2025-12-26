@@ -18,6 +18,14 @@ require("nvim-tree").setup({
   },
 })
 
+-- Prevent plugins (like CopilotChat diff) from hijacking the NvimTree window
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "NvimTree",
+  callback = function()
+    vim.opt_local.winfixbuf = true
+    vim.opt_local.winfixwidth = true -- optional: stops width wobble
+  end,
+})
 
 -- Auto-open File Tree when starting Neovim
 vim.api.nvim_create_autocmd("VimEnter", {

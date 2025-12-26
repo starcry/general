@@ -125,7 +125,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
 
     -- LSP Actions
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts) -- Go to definition
+    --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts) -- Go to definition
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts) -- Go to declaration
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts) -- Go to implementation
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts) -- Show function signature
@@ -172,6 +172,33 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set("n", "<leader>ha", function()
       require("copilot-chat.panel").accept() -- inserts the currently selected suggestion
     end, { desc = "Copilot Chat: Accept suggestion" })
+
+    -- Chat about the *current file* without typing #file:/path every time
+    vim.keymap.set("n", "<leader>ac", function()
+      -- If we accidentally run this while focused in CopilotChat,
+      -- fall back to the alternate buffer (#) which is usually your code file.
+      local src_buf = vim.api.nvim_get_current_buf()
+      if vim.bo[src_buf].filetype == "copilot-chat" then
+        local alt = vim.fn.bufnr("#")
+        if alt ~= -1 then src_buf = alt end
+      end
+
+      local abs = vim.api.nvim_buf_get_name(src_buf)
+      if abs == "" then
+        vim.notify("No file name for current buffer", vim.log.levels.WARN)
+        return
+      end
+
+      local rel = vim.fn.fnamemodify(abs, ":.") -- nicer than /home/aidan/...
+      require("CopilotChat").toggle()
+
+      -- Wait for the chat window to exist, then type into it
+      vim.schedule(function()
+        -- CopilotChat buffer is usually focused after toggle; just feed keys
+        vim.fn.feedkeys("#file:" .. rel .. "\n", "n")
+        vim.cmd("startinsert!")
+      end)
+    end, { desc = "CopilotChat: context = current file" })
 
 --    vim.keymap.set("n", "<leader>hp", ":Copilot panel<CR>", { desc = "Copilot Panel" })
 --    vim.keymap.set("n", "<leader>ha", ":CopilotAction<CR>", { desc = "Copilot Action" })
