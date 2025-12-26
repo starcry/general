@@ -37,11 +37,30 @@ end
 vim.keymap.set("n", "<leader>h", show_keymaps_float, { desc = "Show Keymaps (float)" })
 
 -- enter conflict resolution mode
-vim.keymap.set("n", "<leader>gi", ":DiffviewOpen<CR>", { desc = "Open Git diff view" })
+--vim.keymap.set("n", "<leader>gi", ":DiffviewOpen<CR>", { desc = "Open Git diff view" })
+-- Toggle Diffview on <leader>gi
+vim.keymap.set("n", "<leader>gi", function()
+  local ok, diffview = pcall(require, "diffview")
+  if not ok then
+    vim.notify("diffview.nvim not installed", vim.log.levels.ERROR)
+    return
+  end
+
+  local lib = require("diffview.lib")
+  local view = lib.get_current_view()
+  if view then
+    diffview.close()
+  else
+    diffview.open()  -- you can pass args here, e.g. diffview.open({}) or "HEAD~1"
+  end
+end, { desc = "Toggle Diffview" })
+
 -- Take "ours" for current conflict
 vim.keymap.set("n", "<leader>go", ":diffget //2<CR>", { desc = "Take ours" })
+--vim.keymap.set("n", "<leader>go", "<cmd>diffget LOCAL<CR>", { desc = "Take ours (LOCAL)" })
 -- Take "theirs" for current conflict
 vim.keymap.set("n", "<leader>gt", ":diffget //3<CR>", { desc = "Take theirs" })
+--vim.keymap.set("n", "<leader>gt", "<cmd>diffget THEIRS<CR>", { desc = "Take theirs (THEIRS)" })
 -- Delete entire conflict
 -- Delete the whole conflict region under the cursor
 vim.keymap.set("n", "<leader>gd", function()
@@ -130,19 +149,37 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Type Definitions & Symbols
     vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts) -- Go to type definition
 
-		-- Debugging
-		vim.keymap.set('n', '<F5>', function() require('dap').continue() end, opts)
-		vim.keymap.set('n', '<F10>', function() require('dap').step_over() end, opts)
-		vim.keymap.set('n', '<F11>', function() require('dap').step_into() end, opts)
-		vim.keymap.set('n', '<F12>', function() require('dap').step_out() end, opts)
-		vim.keymap.set('n', '<leader>b', function() require('dap').toggle_breakpoint() end, opts)
-		vim.keymap.set('n', '<leader>B', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, opts)
+    -- Debugging
+    vim.keymap.set('n', '<F5>', function() require('dap').continue() end, opts)
+    vim.keymap.set('n', '<F10>', function() require('dap').step_over() end, opts)
+    vim.keymap.set('n', '<F11>', function() require('dap').step_into() end, opts)
+    vim.keymap.set('n', '<F12>', function() require('dap').step_out() end, opts)
+    vim.keymap.set('n', '<leader>b', function() require('dap').toggle_breakpoint() end, opts)
+    vim.keymap.set('n', '<leader>B', function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, opts)
+
     -- Trailing space shortcuts
     vim.keymap.set("n", "]t", "/\\s\\+$<CR>", { desc = "Next trailing space" })
     vim.keymap.set("n", "[t", "?\\s\\+$<CR>", { desc = "Previous trailing space" })
     vim.keymap.set("n", "<leader>tl", [[:s/\s\+$//<CR>]], { desc = "Trim trailing spaces (line)" })
     vim.keymap.set("n", "<leader>tf", [[:%s/\s\+$//e<CR>]], { desc = "Trim trailing spaces (file)" })
 
+    -- Copilot Chat
+    vim.keymap.set({ "n", "v" }, "<leader>aa", function()
+      require("CopilotChat").toggle()
+    end, { desc = "Toggle Copilot Chat" })
+
+    -- Copilot shortcuts
+    vim.keymap.set("n", "<leader>ha", function()
+      require("copilot-chat.panel").accept() -- inserts the currently selected suggestion
+    end, { desc = "Copilot Chat: Accept suggestion" })
+
+--    vim.keymap.set("n", "<leader>hp", ":Copilot panel<CR>", { desc = "Copilot Panel" })
+--    vim.keymap.set("n", "<leader>ha", ":CopilotAction<CR>", { desc = "Copilot Action" })
+--    vim.keymap.set("i", "<C-l>", 'copilot#Accept("")', {
+--      expr = true,
+--      replace_keycodes = false,
+--      desc = "Copilot Accept",
+--    })
 
   end,
 })

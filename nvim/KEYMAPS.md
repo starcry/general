@@ -83,6 +83,12 @@
 | `<leader>tl` | **Trim** trailing spaces on **current line**. |
 | `<leader>tf` | **Trim** trailing spaces in **entire file**. |
 
+## 🤖 Copilot
+
+| Key | Action |
+|----|-------|
+| `<leader>aa` | Open Copilot panel |
+
 ---
 
 ### Notes

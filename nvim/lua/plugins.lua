@@ -108,7 +108,7 @@ require("lazy").setup({
       vim.g.copilot_no_tab_map = true
       vim.api.nvim_set_keymap(
         "i",
-        "<C-l>",
+        "<C-j>",
         'copilot#Accept("<CR>")',
         { silent = true, expr = true, noremap = true }
       )
@@ -142,6 +142,19 @@ require("lazy").setup({
   },
 
   -- 2. zbirenbaum/copilot.lua (the alternative Copilot client)
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      -- you already have these elsewhere, but listing plenary is harmless
+      { "nvim-lua/plenary.nvim", branch = "master" },
+      -- you do NOT need to list "github/copilot.vim" here because
+      -- you already have it as a top-level plugin spec above
+    },
+    build = "make tiktoken",  -- optional but recommended on macOS/Linux
+    opts = {
+      -- See :h CopilotChat or the README for options
+    },
+  },
   {
     "zbirenbaum/copilot.lua",
     enabled = function()

@@ -34,7 +34,7 @@ alias fn="find ./ -name $1"
 
 alias lsd="ls -d */ | xargs du -chs | grep -v total"
 
-alias gr="cd $(git rev-parse --show-toplevel)"
+#alias gr="cd $(git rev-parse --show-toplevel)"
 #alias gr="echo $(git rev-parse --show-toplevel)"
 
 alias ocp="xclip -i -sel c"
@@ -117,7 +117,8 @@ function lssec() {
 function getsec() {
   for i in $(aws secretsmanager list-secrets --query 'SecretList[].[Name,ARN]' --output text | column -t | grep $1 | awk '{print $2}'); do
     echo Secret: $(echo $i | sed 's/.*://g')
-    aws secretsmanager get-secret-value --secret-id $i --query 'SecretString' --output text | sed 's/\\//g' | jq | grep -v '{\|}' | sed 's/"//g;s/://g;s/,//g;s/  //g' | column -t -s ' '
+    aws secretsmanager get-secret-value --secret-id $i --query 'SecretString' --output text
+    #aws secretsmanager get-secret-value --secret-id $i --query 'SecretString' --output text | sed 's/\\//g' | jq | grep -v '{\|}' | sed 's/"//g;s/://g;s/,//g;s/  //g' | column -t -s ' '
     echo
   done
 }
@@ -421,3 +422,12 @@ bh() {
   fi
 }
 
+je() {
+	local FILE=$1
+	local BLOCK=$2
+	jq ".. | .$BLOCK? // empty" "$FILE"
+}
+
+alias gr="git reset --hard HEAD"
+
+export VAGRANT_DEFAULT_PROVIDER=libvirt
