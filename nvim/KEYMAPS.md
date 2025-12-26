@@ -88,6 +88,11 @@
 | Key | Action |
 |----|-------|
 | `<leader>aa` | Open Copilot panel |
+| `<leader>ca` | Open Copilot panel that automatically uses the current open file |
+| `gd` | use from within copilot this will open the copilot diff |
+| `]c` | go to next change |
+| `[c` | go to previous change |
+| `do` | do change |
 
 ---
 

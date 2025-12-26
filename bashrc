@@ -429,5 +429,6 @@ je() {
 }
 
 alias gr="git reset --hard HEAD"
+alias gd='git format-patch -o /tmp/patches origin/master..HEAD'
 
 export VAGRANT_DEFAULT_PROVIDER=libvirt
