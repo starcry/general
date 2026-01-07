@@ -94,6 +94,13 @@
 | `[c` | go to previous change |
 | `do` | do change |
 
+## 🤖 Other
+
+| Key | Action |
+|----|-------|
+| `<leader>gg` | Open as you type git grep floating panel |
+| `<leader>ob` | Open defined file in another branch |
+
 ---
 
 ### Notes

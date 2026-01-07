@@ -221,3 +221,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+vim.keymap.set("n", "<leader>ob", function()
+  local branch = vim.fn.input("Branch: ")
+  local file = vim.fn.input("File: ")
+
+  if branch == "" or file == "" then return end
+
+  vim.cmd("new")
+  vim.cmd("setlocal buftype=nofile bufhidden=wipe noswapfile readonly")
+  vim.cmd("read !git show " .. branch .. ":" .. file)
+  vim.cmd("0d") -- remove empty first line
+end, { desc = "Open file from another branch" })
+
