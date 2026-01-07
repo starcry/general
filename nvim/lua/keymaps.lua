@@ -179,10 +179,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
       require("CopilotChat").toggle()
     end, { desc = "Toggle Copilot Chat" })
 
-    -- Copilot shortcuts
-    vim.keymap.set("n", "<leader>ha", function()
-      require("copilot-chat.panel").accept() -- inserts the currently selected suggestion
-    end, { desc = "Copilot Chat: Accept suggestion" })
+--    -- Copilot shortcuts
+--    vim.keymap.set("n", "<leader>ha", function()
+--      require("copilot-chat.panel").accept() -- inserts the currently selected suggestion
+--    end, { desc = "Copilot Chat: Accept suggestion" })
 
     -- Chat about the *current file* without typing #file:/path every time
     vim.keymap.set("n", "<leader>ac", function()
@@ -210,26 +210,63 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.cmd("startinsert!")
       end)
     end, { desc = "CopilotChat: context = current file" })
---    vim.keymap.set("n", "<leader>hp", ":Copilot panel<CR>", { desc = "Copilot Panel" })
---    vim.keymap.set("n", "<leader>ha", ":CopilotAction<CR>", { desc = "Copilot Action" })
---    vim.keymap.set("i", "<C-l>", 'copilot#Accept("")', {
---      expr = true,
---      replace_keycodes = false,
---      desc = "Copilot Accept",
---    })
+    vim.keymap.set("n", "<leader>hp", ":Copilot panel<CR>", { desc = "Copilot Panel" })
+    vim.keymap.set("n", "<leader>ha", ":CopilotAction<CR>", { desc = "Copilot Action" })
+    vim.keymap.set("i", "<C-l>", 'copilot#Accept("")', {
+      expr = true,
+      replace_keycodes = false,
+      desc = "Copilot Accept",
+    })
 
   end,
 })
 
-vim.keymap.set("n", "<leader>ob", function()
+vim.keymap.set("n", "<leader>gB", function()
   local branch = vim.fn.input("Branch: ")
-  local file = vim.fn.input("File: ")
+  if branch == "" then return end
 
-  if branch == "" or file == "" then return end
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
 
-  vim.cmd("new")
-  vim.cmd("setlocal buftype=nofile bufhidden=wipe noswapfile readonly")
-  vim.cmd("read !git show " .. branch .. ":" .. file)
-  vim.cmd("0d") -- remove empty first line
-end, { desc = "Open file from another branch" })
+  require("telescope.pickers").new({}, {
+    prompt_title = "Files from " .. branch,
+    finder = require("telescope.finders").new_oneshot_job({
+      "git", "ls-tree", "-r", "--name-only", branch
+    }),
+    sorter = require("telescope.config").values.generic_sorter({}),
+    attach_mappings = function(prompt_bufnr, map)
+      local function open_selected()
+        local entry = action_state.get_selected_entry()
+        local file = entry and (entry.value or entry[1]) or action_state.get_current_line()
+
+        if not file or file == "" then
+          vim.notify("No file selected", vim.log.levels.WARN)
+          return
+        end
+
+        actions.close(prompt_bufnr)
+
+        vim.cmd("new")
+        vim.bo.buftype = "nofile"
+        vim.bo.bufhidden = "wipe"
+        vim.bo.swapfile = false
+        vim.bo.readonly = true
+
+        local res = vim.system({ "git", "show", branch .. ":" .. file }, { text = true }):wait()
+        if res.code ~= 0 then
+          vim.notify(res.stderr or "git show failed", vim.log.levels.ERROR)
+          return
+        end
+
+        vim.bo.modifiable = true
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(res.stdout or "", "\n", { plain = true }))
+        vim.bo.modifiable = false
+      end
+
+      map("i", "<CR>", open_selected)
+      map("n", "<CR>", open_selected)
+      return true
+    end,
+  }):find()
+end, { desc = "Browse files from another branch" })
 
