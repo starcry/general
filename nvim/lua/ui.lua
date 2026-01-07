@@ -33,3 +33,15 @@ vim.api.nvim_create_autocmd("VimEnter", {
     require("nvim-tree.api").tree.open()
   end,
 })
+
+-- Close NvimTree automatically when CopilotChat opens
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "copilot-chat",
+  callback = function()
+    local ok, api = pcall(require, "nvim-tree.api")
+    if ok and api.tree.is_visible() then
+      api.tree.close()
+    end
+  end,
+})
+

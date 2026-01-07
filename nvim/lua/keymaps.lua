@@ -88,6 +88,17 @@ vim.keymap.set("n", "<leader>gd", function()
   vim.notify("Conflict region deleted", vim.log.levels.INFO)
 end, { desc = "Delete merge conflict region" })
 
+-- Telescope Git search
+vim.keymap.set("n", "<leader>gg", function()
+  require("telescope.builtin").live_grep()
+end, { desc = "Git grep (tracked files only)" })
+
+vim.keymap.set("n", "<leader>fg", function()
+  require("telescope.builtin").live_grep()
+end, { desc = "Live grep (rg)" })
+
+vim.keymap.set("n", "<leader>gr", ":GitGrepRoot<CR>", { desc = "Git grep from repo root" })
+
 -- Keybinding to Toggle File Explorer (NvimTree)
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>r", ":NvimTreeRefresh<CR>", { noremap = true, silent = true })
@@ -199,7 +210,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.cmd("startinsert!")
       end)
     end, { desc = "CopilotChat: context = current file" })
-
 --    vim.keymap.set("n", "<leader>hp", ":Copilot panel<CR>", { desc = "Copilot Panel" })
 --    vim.keymap.set("n", "<leader>ha", ":CopilotAction<CR>", { desc = "Copilot Action" })
 --    vim.keymap.set("i", "<C-l>", 'copilot#Accept("")', {

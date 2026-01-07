@@ -237,6 +237,10 @@ require("lazy").setup({
     dependencies = { 'nvim-lua/plenary.nvim' }
   },
   {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+  },
+  {
     "sindrets/diffview.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
@@ -264,3 +268,25 @@ require("nvim-treesitter.configs").setup({
   highlight = { enable = true },
   indent = { enable = true },
 })
+
+local telescope = require("telescope")
+local actions = require("telescope.actions")
+
+telescope.setup({
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-q>"] = actions.send_to_qflist,
+      },
+    },
+  },
+})
+
+-- Enable fzf-native if installed
+pcall(telescope.load_extension, "fzf")
+
+local builtin = require("telescope.builtin")
+
+vim.api.nvim_create_user_command("GitGrepRoot", function()
+  builtin.git_grep({ cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1] })
+end, {})
