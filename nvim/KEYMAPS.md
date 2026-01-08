@@ -6,6 +6,9 @@
 
 | Keys | Action |
 |---|---|
+| `<leader>gB` | **Browse files** from another branch (Telescope). |
+| `<leader>gm` | **Update master** with latest changes from origin. |
+| `<leader>gn` | Create and switch to a **new branch**. |
 | `<leader>gi` | Open Git diff view (`DiffviewOpen`). |
 | `<leader>go` | Take **ours** for current conflict (`:diffget //2`). |
 | `<leader>gt` | Take **theirs** for current conflict (`:diffget //3`). |
@@ -99,7 +102,7 @@
 | Key | Action |
 |----|-------|
 | `<leader>gg` | Open as you type git grep floating panel |
-| `<leader>ob` | Open defined file in another branch |
+
 
 ---
 
