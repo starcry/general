@@ -69,12 +69,5 @@ vim.o.cursorline = true
 vim.o.cursorcolumn = true
 
 
-require("lazy").setup({
-  defaults = {
-    lazy = false,  -- Load everything immediately
-  },
-  change_detection = {
-    enabled = false,  -- Don’t auto-reload plugins
-    notify = false,
-  },
-})
+-- Lazy.setup is now initialized in lua/plugins.lua
+

@@ -36,6 +36,37 @@ end
 
 vim.keymap.set("n", "<leader>h", show_keymaps_float, { desc = "Show Keymaps (float)" })
 
+-- === MAGIC PACK KEYMAPS ===
+
+-- Harpoon
+local harpoon_ok, harpoon = pcall(require, "harpoon")
+if harpoon_ok then
+  harpoon:setup()
+  vim.keymap.set("n", "<leader>hb", function() harpoon:list():add() end, { desc = "Harpoon: Add file" })
+  vim.keymap.set("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon: Menu" })
+
+  vim.keymap.set("n", "<leader>ha", function() harpoon:list():select(1) end)
+  vim.keymap.set("n", "<leader>hs", function() harpoon:list():select(2) end)
+  vim.keymap.set("n", "<leader>hd", function() harpoon:list():select(3) end)
+  vim.keymap.set("n", "<leader>hf", function() harpoon:list():select(4) end)
+end
+
+
+-- Oil.nvim
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
+-- Trouble
+vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end, { desc = "Toggle Trouble" })
+vim.keymap.set("n", "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end, { desc = "Trouble Workspace Diagnostics" })
+vim.keymap.set("n", "<leader>xd", function() require("trouble").toggle("document_diagnostics") end, { desc = "Trouble Document Diagnostics" })
+vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end, { desc = "Trouble Quickfix" })
+vim.keymap.set("n", "<leader>xl", function() require("trouble").toggle("loclist") end, { desc = "Trouble Loclist" })
+vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end, { desc = "Trouble LSP References" })
+
+-- Flash is configured in plugins.lua keys directly, but could be added here if needed.
+-- === END MAGIC PACK KEYMAPS ===
+
+
 -- enter conflict resolution mode
 --vim.keymap.set("n", "<leader>gi", ":DiffviewOpen<CR>", { desc = "Open Git diff view" })
 -- Toggle Diffview on <leader>gi
