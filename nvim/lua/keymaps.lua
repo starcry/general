@@ -253,51 +253,70 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 vim.keymap.set("n", "<leader>gB", function()
-  local branch = vim.fn.input("Branch: ")
-  if branch == "" then return end
-
   local actions = require("telescope.actions")
   local action_state = require("telescope.actions.state")
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
 
-  require("telescope.pickers").new({}, {
-    prompt_title = "Files from " .. branch,
-    finder = require("telescope.finders").new_oneshot_job({
-      "git", "ls-tree", "-r", "--name-only", branch
-    }),
-    sorter = require("telescope.config").values.generic_sorter({}),
+  -- 1. Helper function to open file picker for a specific branch
+  local function open_file_picker(branch)
+    pickers.new({}, {
+      prompt_title = "Files from " .. branch,
+      finder = finders.new_oneshot_job({
+        "git", "ls-tree", "-r", "--name-only", branch
+      }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(prompt_bufnr, map)
+        local function open_selected()
+          local entry = action_state.get_selected_entry()
+          local file = entry and (entry.value or entry[1]) or action_state.get_current_line()
+
+          if not file or file == "" then
+            vim.notify("No file selected", vim.log.levels.WARN)
+            return
+          end
+
+          actions.close(prompt_bufnr)
+
+          vim.cmd("new")
+          vim.bo.buftype = "nofile"
+          vim.bo.bufhidden = "wipe"
+          vim.bo.swapfile = false
+          vim.bo.readonly = true
+
+          -- Load file content from git
+          local res = vim.system({ "git", "show", branch .. ":" .. file }, { text = true }):wait()
+          if res.code ~= 0 then
+            vim.notify(res.stderr or "git show failed", vim.log.levels.ERROR)
+            return
+          end
+
+          vim.bo.modifiable = true
+          vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(res.stdout or "", "\n", { plain = true }))
+          vim.bo.modifiable = false
+        end
+
+        map("i", "<CR>", open_selected)
+        map("n", "<CR>", open_selected)
+        return true
+      end,
+    }):find()
+  end
+
+  -- 2. Open Branch Picker first
+  require("telescope.builtin").git_branches({
     attach_mappings = function(prompt_bufnr, map)
-      local function open_selected()
-        local entry = action_state.get_selected_entry()
-        local file = entry and (entry.value or entry[1]) or action_state.get_current_line()
-
-        if not file or file == "" then
-          vim.notify("No file selected", vim.log.levels.WARN)
-          return
-        end
-
+      actions.select_default:replace(function()
         actions.close(prompt_bufnr)
-
-        vim.cmd("new")
-        vim.bo.buftype = "nofile"
-        vim.bo.bufhidden = "wipe"
-        vim.bo.swapfile = false
-        vim.bo.readonly = true
-
-        local res = vim.system({ "git", "show", branch .. ":" .. file }, { text = true }):wait()
-        if res.code ~= 0 then
-          vim.notify(res.stderr or "git show failed", vim.log.levels.ERROR)
-          return
+        local selection = action_state.get_selected_entry()
+        -- selection.value is the branch name
+        if selection and selection.value then
+          open_file_picker(selection.value)
         end
-
-        vim.bo.modifiable = true
-        vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(res.stdout or "", "\n", { plain = true }))
-        vim.bo.modifiable = false
-      end
-
-      map("i", "<CR>", open_selected)
-      map("n", "<CR>", open_selected)
+      end)
       return true
     end,
-  }):find()
-end, { desc = "Browse files from another branch" })
+  })
+end, { desc = "Browse files from another branch (Telescope)" })
 
