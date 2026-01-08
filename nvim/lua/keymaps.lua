@@ -320,3 +320,26 @@ vim.keymap.set("n", "<leader>gB", function()
   })
 end, { desc = "Browse files from another branch (Telescope)" })
 
+-- Update master branch from origin (without checking it out)
+vim.keymap.set("n", "<leader>gm", function()
+  local res = vim.system({ "git", "fetch", "origin", "master:master" }):wait()
+  if res.code == 0 then
+    vim.notify("Master updated successfully", vim.log.levels.INFO)
+  else
+    vim.notify("Failed to update master: " .. (res.stderr or ""), vim.log.levels.ERROR)
+  end
+end, { desc = "Update master branch from origin" })
+
+-- Create and switch to a new branch
+vim.keymap.set("n", "<leader>gn", function()
+  local branch = vim.fn.input("New Branch Name: ")
+  if branch == "" then return end
+
+  local res = vim.system({ "git", "checkout", "-b", branch }):wait()
+  if res.code == 0 then
+    vim.notify("Switched to new branch: " .. branch, vim.log.levels.INFO)
+  else
+    vim.notify("Failed to create branch: " .. (res.stderr or ""), vim.log.levels.ERROR)
+  end
+end, { desc = "Create and switch to new branch" })
+
