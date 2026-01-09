@@ -361,21 +361,53 @@ vim.keymap.set("n", "<leader>gm", function()
   end
 end, { desc = "Update default branch (main/master) from origin" })
 
--- Create and switch to a new branch
-vim.keymap.set("n", "<leader>gn", function()
-  local branch = vim.fn.input("New Branch Name: ")
-  if branch == "" then return end
-
-  local res = vim.system({ "git", "checkout", "-b", branch }):wait()
-  if res.code == 0 then
-    vim.notify("Switched to new branch: " .. branch, vim.log.levels.INFO)
-  else
-    vim.notify("Failed to create branch: " .. (res.stderr or ""), vim.log.levels.ERROR)
-  end
-end, { desc = "Create and switch to new branch" })
-
--- Switch to an existing branch
+-- Unified Git Branch Manager: Search or Create
 vim.keymap.set("n", "<leader>gs", function()
-  require("telescope.builtin").git_branches()
-end, { desc = "Switch branch" })
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local builtin = require("telescope.builtin")
+
+  builtin.git_branches({
+    attach_mappings = function(prompt_bufnr, map)
+      actions.select_default:replace(function()
+        local selection = action_state.get_selected_entry()
+        local prompt = action_state.get_current_line()
+        actions.close(prompt_bufnr)
+
+        if selection then
+          -- Default behavior: switch to selected branch
+          -- Use Telescope's native checkout logic or manual?
+          -- Manual is safer to ensure we use the 'switch' logic we want.
+          local branch = selection.value
+          -- If it's a remote branch, track it
+          if branch:find("^origin/") then
+             -- Strip origin/ to create local tracking branch
+             local local_branch = branch:gsub("^origin/", "")
+             local res = vim.system({ "git", "checkout", "-b", local_branch, "--track", branch }):wait()
+             if res.code ~= 0 then
+               -- Fallback just in case (e.g. branch exists)
+               vim.system({ "git", "checkout", local_branch }):wait()
+             end
+          else
+             vim.system({ "git", "checkout", branch }):wait()
+          end
+          vim.notify("Switched to " .. branch, vim.log.levels.INFO)
+        elseif prompt ~= "" then
+          -- No selection matched -> Ask to create new branch
+          local confirmation = vim.fn.confirm("Branch '" .. prompt .. "' does not exist. Create?", "&Yes\n&No", 1)
+          if confirmation == 1 then
+            local res = vim.system({ "git", "checkout", "-b", prompt }):wait()
+            if res.code == 0 then
+              vim.cmd("redraw")
+              vim.notify("Created and switched to " .. prompt, vim.log.levels.INFO)
+            else
+              vim.notify("Failed to create branch: " .. (res.stderr or ""), vim.log.levels.ERROR)
+            end
+          end
+        end
+      end)
+      return true
+    end,
+  })
+end, { desc = "Git: Switch branch or create new" })
 
