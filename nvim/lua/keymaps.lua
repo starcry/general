@@ -320,15 +320,46 @@ vim.keymap.set("n", "<leader>gB", function()
   })
 end, { desc = "Browse files from another branch (Telescope)" })
 
--- Update master branch from origin (without checking it out)
+-- Update default branch (main/master) from origin
 vim.keymap.set("n", "<leader>gm", function()
-  local res = vim.system({ "git", "fetch", "origin", "master:master" }):wait()
-  if res.code == 0 then
-    vim.notify("Master updated successfully", vim.log.levels.INFO)
-  else
-    vim.notify("Failed to update master: " .. (res.stderr or ""), vim.log.levels.ERROR)
+  -- 1. Helper to find the default branch (prefer main, then master)
+  local function get_default_branch()
+    local res_main = vim.system({ "git", "rev-parse", "--verify", "main" }):wait()
+    if res_main.code == 0 then return "main" end
+
+    local res_master = vim.system({ "git", "rev-parse", "--verify", "master" }):wait()
+    if res_master.code == 0 then return "master" end
+
+    return nil -- Could not determine default branch locally
   end
-end, { desc = "Update master branch from origin" })
+
+  local default_branch = get_default_branch()
+  if not default_branch then
+    vim.notify("Could not detect 'main' or 'master' branch locally", vim.log.levels.ERROR)
+    return
+  end
+
+  -- 2. Check current branch
+  local current_branch = vim.trim(vim.fn.system("git rev-parse --abbrev-ref HEAD"))
+
+  if current_branch == default_branch then
+    -- We are ON the default branch -> Pull
+    local res = vim.system({ "git", "pull", "origin", default_branch }):wait()
+    if res.code == 0 then
+      vim.notify("Pulled " .. default_branch .. " successfully", vim.log.levels.INFO)
+    else
+      vim.notify("Failed to pull " .. default_branch .. ": " .. (res.stderr or ""), vim.log.levels.ERROR)
+    end
+  else
+    -- We are OFF the default branch -> Fetch update in background
+    local res = vim.system({ "git", "fetch", "origin", default_branch .. ":" .. default_branch }):wait()
+    if res.code == 0 then
+      vim.notify(default_branch .. " updated successfully (background)", vim.log.levels.INFO)
+    else
+      vim.notify("Failed to update " .. default_branch .. ": " .. (res.stderr or ""), vim.log.levels.ERROR)
+    end
+  end
+end, { desc = "Update default branch (main/master) from origin" })
 
 -- Create and switch to a new branch
 vim.keymap.set("n", "<leader>gn", function()
@@ -342,4 +373,9 @@ vim.keymap.set("n", "<leader>gn", function()
     vim.notify("Failed to create branch: " .. (res.stderr or ""), vim.log.levels.ERROR)
   end
 end, { desc = "Create and switch to new branch" })
+
+-- Switch to an existing branch
+vim.keymap.set("n", "<leader>gs", function()
+  require("telescope.builtin").git_branches()
+end, { desc = "Switch branch" })
 
