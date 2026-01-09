@@ -24,7 +24,7 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.undofile = false
-vim.opt.shadafile = "NONE"
+--vim.opt.shadafile = "NONE"
 vim.opt.directory = "/tmp"  -- If anything leaks, it's gone on reboot
 
 -- 🔍 Show trailing whitespace

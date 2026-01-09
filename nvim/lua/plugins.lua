@@ -307,6 +307,27 @@ require("lazy").setup({
       })
     end,
   },
+  {
+    "rmagatti/auto-session",
+    lazy = false,
+    keys = {
+      -- Will use Telescope if installed or a vim.ui.select picker otherwise
+      { "<leader>wr", "<cmd>AutoSession search<CR>", desc = "Session search" },
+      { "<leader>ws", "<cmd>AutoSession save<CR>", desc = "Save session" },
+      { "<leader>wt", "<cmd>AutoSession toggle<CR>", desc = "Toggle session" },
+      { "<leader>wd", "<cmd>AutoSession delete<CR>", desc = "Wipe current session" },
+      { "<leader>wl", "<cmd>AutoSession restore<CR>", desc = "Load previous session" },
+    },
+    ---enables autocomplete for opts
+    ---@module "auto-session"
+    ---@type AutoSession.Config
+    opts = {
+      auto_save = false,
+      auto_restore = false,
+      suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+      -- log_level = 'debug',
+    },
+  },
 }, {
   defaults = {
     lazy = false,  -- Load everything immediately
@@ -350,3 +371,5 @@ local builtin = require("telescope.builtin")
 vim.api.nvim_create_user_command("GitGrepRoot", function()
   builtin.git_grep({ cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1] })
 end, {})
+
+
