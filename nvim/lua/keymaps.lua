@@ -119,14 +119,21 @@ vim.keymap.set("n", "<leader>gd", function()
   vim.notify("Conflict region deleted", vim.log.levels.INFO)
 end, { desc = "Delete merge conflict region" })
 
--- Telescope Git search
+-- Telescope Git search (Tracked files only)
 vim.keymap.set("n", "<leader>gg", function()
-  require("telescope.builtin").live_grep()
+  require("telescope.builtin").live_grep({
+    vimgrep_arguments = { "git", "grep", "-n", "--column" },
+  })
 end, { desc = "Git grep (tracked files only)" })
 
-vim.keymap.set("n", "<leader>fg", function()
-  require("telescope.builtin").live_grep()
-end, { desc = "Live grep (rg)" })
+-- Grep word under cursor (Tracked files only)
+vim.keymap.set("n", "<leader>gw", function()
+  require("telescope.builtin").live_grep({
+    vimgrep_arguments = { "git", "grep", "-n", "--column" },
+    default_text = vim.fn.expand("<cword>"),
+    initial_mode = "normal", -- Optional: start in normal mode if searching word? No, let's keep insert to edit.
+  })
+end, { desc = "Grep word under cursor (tracked)" })
 
 vim.keymap.set("n", "<leader>gr", ":GitGrepRoot<CR>", { desc = "Git grep from repo root" })
 

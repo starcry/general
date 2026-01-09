@@ -1,159 +1,97 @@
-```md
-# Neovim Configuration with Multiple Copilot Modes & LSP
+# ✨ Neovim "Magic" Configuration
 
-This Neovim configuration provides a flexible setup for multiple Copilot modes, integrated LSP servers (for Terraform, Ansible, Bash, Docker, YAML, etc.), Treesitter, snippet support, and more—using [Lazy.nvim](https://github.com/folke/lazy.nvim) for plugin management.
+Welcome to your advanced Neovim setup! This configuration is built for speed, aesthetics, and power, leveraging **Lazy.nvim** for lightning-fast startup times and a suite of "Magic" plugins to enhance your workflow.
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Features](#features)
-3. [Installation](#installation)
-4. [Copilot Modes](#copilot-modes)
-5. [Key Plugins & Configuration Highlights](#key-plugins--configuration-highlights)
-6. [Usage](#usage)
-7. [Credits](#credits)
+## 🚀 Quick Start
+
+1.  **Docs**: Press `<leader>h` inside Neovim to see your **Keymaps Cheat Sheet**.
+2.  **Update**: Run `:Lazy sync` to update all plugins and Mason packages.
+3.  **Health**: Run `:checkhealth` if something feels wrong.
 
 ---
 
-## Overview
+## 📚 The "Magic" Plugin Directory
 
-- **Neovim version**: Requires at least Neovim 0.8.
-- **Plugin Manager**: [Lazy.nvim](https://github.com/folke/lazy.nvim).
-- **Copilot**: Supports both the official `github/copilot.vim` plugin (inline suggestions) and the alternative [`copilot.lua`](https://github.com/zbirenbaum/copilot.lua) + [`copilot-cmp`](https://github.com/zbirenbaum/copilot-cmp) for integration into `nvim-cmp`.
-- **Multiple LSPs**: Preconfigured for Terraform, YAML, Helm, Bash, Ansible, Docker, plus standard defaults.
-- **Treesitter**-powered syntax highlighting and code structure awareness.
-- **LuaSnip** for snippets (sample Terraform snippets included).
-- **nvim-tree** for file browsing, auto-opens at startup.
-- **Lualine** as a status line.
+This configuration relies on these powerful plugins. Click the links to read their full documentation for advanced commands and configuration options.
 
-This configuration is set up so you can easily **toggle** between different Copilot modes or disable Copilot entirely.
+### 🧠 Core & Package Management
+*   **[Lazy.nvim](https://github.com/folke/lazy.nvim)**: The modern plugin manager powering this config.
+*   **[Mason.nvim](https://github.com/williamboman/mason.nvim)**: Portable package manager for LSPs, DAPs, linters, and formatters.
+    *   *Related*: `williamboman/mason-lspconfig.nvim`, `jay-babu/mason-nvim-dap.nvim`.
 
----
+### 🎨 UI & Aesthetics
+*   **[Noice.nvim](https://github.com/folke/noice.nvim)**: Replaces the UI for messages, cmdline, and popupmenu with fancy animations.
+*   **[Nvim-Notify](https://github.com/rcarriga/nvim-notify)**: Beautiful notification manager.
+*   **[Lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)**: The blazing fast statusline at the bottom of your screen.
+*   **[Nvim-Tree](https://github.com/nvim-tree/nvim-tree.lua)**: A file explorer tree (`<leader>e`).
+*   **[Oil.nvim](https://github.com/stevearc/oil.nvim)**: Edit your filesystem like a normal buffer (`-`).
+*   **[Nvim-Web-Devicons](https://github.com/nvim-tree/nvim-web-devicons)**: Adds file type icons to your plugins.
 
-## Features
+### 🧭 Navigation & Fuzzy Finding
+*   **[Telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)**: The highly extendable fuzzy finder over lists.
+*   **[Harpoon](https://github.com/ThePrimeagen/harpoon/tree/harpoon2)**: Blazing fast file navigation for your "working set" of files.
+*   **[Flash.nvim](https://github.com/folke/flash.nvim)**: Navigate your code with search labels (like EasyMotion but faster).
 
-1. **Multiple Copilot Modes**:
-   - **disabled**: Only nvim-cmp (for LSP, buffer, path completions), no Copilot.
-   - **native**: Official GitHub Copilot inline suggestions only.
-   - **cmp**: Copilot suggestions appear in the nvim-cmp menu (no inline ghost text).
-   - **both**: Official GitHub Copilot inline suggestions **and** standard LSP completions from nvim-cmp.
+### 💻 Coding, LSP & Completion
+*   **[Nvim-LSPConfig](https://github.com/neovim/nvim-lspconfig)**: Quickstart configs for Neovim LSP.
+*   **[Nvim-Cmp](https://github.com/hrsh7th/nvim-cmp)**: The auto-completion engine.
+    *   *Sources*: `cmp-nvim-lsp`, `cmp-buffer`, `cmp-path`, `cmp-luasnip`.
+*   **[LuaSnip](https://github.com/L3MON4D3/LuaSnip)**: Snippet engine.
+*   **[Nvim-Surround](https://github.com/kylechui/nvim-surround)**: Add/change/delete surrounding delimiter pairs with ease (e.g. `ysiw"`).
+*   **[Nvim-Autopairs](https://github.com/windwp/nvim-autopairs)**: Autopairs for neovim written in Lua.
+*   **[Nvim-DAP](https://github.com/mfussenegger/nvim-dap)**: Debug Adapter Protocol client (Debugging).
+*   **[SchemaStore.nvim](https://github.com/b0o/schemastore.nvim)**: JSON schemas for autocompletion.
 
-2. **Treesitter** for better syntax highlighting, incremental parsing, and code structure.
+### 🌳 Git Integration
+*   **[Gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)**: Git integration for buffers (signs in gutter, blame line).
+*   **[Neogit](https://github.com/NeogitOrg/neogit)**: A Magit clone for Neovim.
+*   **[Diffview.nvim](https://github.com/sindrets/diffview.nvim)**: Single tabpage interface for easily cycling through diffs.
+*   **[Auto-Session](https://github.com/rmagatti/auto-session)**: Automated session manager (`<leader>ws`, `<leader>wr`).
 
-3. **LSP Servers** for Terraform, Ansible, Bash, Dockerfile, YAML, Helm, etc.
+### 🤖 AI Assistance
+*   **[Copilot.vim](https://github.com/github/copilot.vim)**: Official GitHub Copilot plugin (Ghost text).
+*   **[Copilot.lua](https://github.com/zbirenbaum/copilot.lua)**: Pure Lua alternative for Copilot.
+*   **[CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim)**: Chat with Copilot in Neovim (`<leader>aa`).
 
-4. **Snippet Engine** with [LuaSnip](https://github.com/L3MON4D3/LuaSnip) and sample Terraform snippets (`lua/snippets/terraform.lua`).
-
-5. **nvim-tree** file explorer automatically opens on start.
-
-6. **Lazy.nvim** plugin manager, easy updates and lazy-loading of plugins.
-
----
-
-## Installation
-
-1. **Install Neovim 0.8+**  
-   - Check out [neovim.io](https://neovim.io) or use your system package manager.
-   - I recommend installing via the website as the ubuntu package is often outdated.
-   - If you are using ubuntu you can run the following commands to install neovim
-   ```bash
-    sudo apt update
-    sudo apt upgrade -y
-    sudo apt install -y unzip python3-pip
-    python3 -m pip install --user ansible
-    wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-    tar -xvf nvim-linux-x86_64.tar.gz
-    sudo cp nvim-linux-x86_64/bin/nvim /usr/bin/nvim
-    ansible-playbook setup.yml
-   ```
-2. **Open Neovim**:
-   ```bash
-   nvim
-   ```
-   Lazy.nvim will prompt to install missing plugins the first time you open Neovim.
-
-3. **Install & Sync Plugins**:
-   ```vim
-   :Lazy sync
-   ```
-   This installs all plugins. If you’re missing language servers, install them globally:
-   ```bash
-   npm install -g bash-language-server yaml-language-server dockerfile-language-server-nodejs @microsoft/helm-ls
-   pip install ansible ansible-lint
-   brew install terraform-ls  # or another method for your OS
-   ```
+### 🌲 Syntax Highlighting
+*   **[Nvim-Treesitter](https://github.com/nvim-treesitter/nvim-treesitter)**: Treesitter configurations and abstraction layer.
 
 ---
 
-## Copilot Modes
+## 🍳 The Cookbook
 
-Open **`init.lua`** and change:
-```lua
-vim.g.copilot_mode = "both"
--- Possible values:
---   "disabled" => No Copilot at all; only nvim-cmp LSP completions
---   "native"   => Official GitHub Copilot inline suggestions only
---   "cmp"      => Copilot suggestions in the nvim-cmp popup
---   "both"     => Inline GitHub Copilot plus nvim-cmp completions
-```
-After changing this value, **save & restart Neovim** to apply.
+Features that don't have dedicated keymaps but are useful to know.
 
----
+### 📦 Managing Plugins & Tools
+*   **Update Plugins**: `:Lazy sync`
+*   **Check Plugin Status**: `:Lazy home`
+*   **Install New Tool (LSP/Linter)**: `:Mason` -> Use arrow keys and `<CR>` to install/update tools.
 
-## Key Plugins & Configuration Highlights
+### 🕵️ Telescope Power User
+Telescope can do almost anything. Here are some commands to run directly (`:Telescope <command>`):
+*   `commands`: Search and run Neovim commands.
+*   `keymaps`: Search normal mode keymappings.
+*   `man_pages`: Search man pages.
+*   `colorscheme`: Preview and switch colorschemes.
+*   `resume`: Open the last picker with the same search results.
 
-1. **[Lazy.nvim](https://github.com/folke/lazy.nvim)** – plugin manager (`lua/plugins.lua`).
-2. **[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)** – LSP for Terraform (`terraform-ls`), Ansible, Bash, Docker, YAML, Helm, etc.
-3. **[github/copilot.vim](https://github.com/github/copilot.vim)** – used in “native” or “both” mode for inline Copilot suggestions.  
-   - Remapped `<C-l>` as the accept key (instead of `<Tab>`).
-4. **[zbirenbaum/copilot.lua](https://github.com/zbirenbaum/copilot.lua)** + **[copilot-cmp](https://github.com/zbirenbaum/copilot-cmp)** – used in “cmp” mode to feed Copilot suggestions into nvim-cmp (no inline ghost text).
-5. **[hrsh7th/nvim-cmp](https://github.com/hrsh7th/nvim-cmp)** – autocompletion framework (LSP, buffer, path, etc.).
-6. **[LuaSnip](https://github.com/L3MON4D3/LuaSnip)** – snippet engine (sample Terraform snippets in `lua/snippets/terraform.lua`).
-7. **[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)** – improved syntax highlighting & structure.
-8. **[nvim-tree](https://github.com/nvim-tree/nvim-tree.lua)** – file explorer, auto-opens on start.
-9. **[lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)** – status line.
+### ⚡ Flash Navigation
+Flash is installed but often forgotten.
+*   **Jump to any word**: Press `s` (in normal/visual mode) then type two characters of the word you want to jump to. Labels will appear.
+*   **Treesitter Select**: Press `S` to visually select a Treesitter node (like a function or if-block).
 
----
+### 🪵 Git Magic
+*   **Full Magit Experience**: Run `:Neogit` to open a full git status window where you can stage hunks (`s`), commit (`c`), push (`P`), etc.
+*   **Detailed History**: `:DiffviewFileHistory` shows the history of the current file.
+*   **Resolve Conflicts**: `:DiffviewOpen` opens a 3-way merge view.
 
-## Usage
+### SESSION MANAGEMENT
+*   **Switch Project**: `<leader>wr` (Search Sessions)
+*   **Save Current**: `<leader>ws`
+*   **Wipe Current**: `<leader>wd`
+*   **Toggle Auto-Save**: `<leader>wt`
 
-1. **Launch Neovim**:
-   ```bash
-   nvim
-   ```
-2. **Check or Update Plugins**:
-   ```vim
-   :Lazy sync
-   ```
-3. **Switch Copilot Mode** in `init.lua`:
-   ```lua
-   vim.g.copilot_mode = "native"
-   ```
-   Then **restart** Neovim for changes to take effect.
-
-4. **Test LSP & Copilot**:
-   - Open a file (like `main.tf`) to check LSP functionalities (hover, go-to-definition, etc.).
-   - If in “native” or “both” mode, Copilot inline suggestions appear as ghost text.  
-     - Press `<C-l>` to accept.
-   - If in “cmp” mode, Copilot completions appear in the nvim-cmp popup.  
-     - Use `<Tab>` or `<CR>` to select them.
-
-5. **Keymaps**:
-   - `<leader>e` toggles the file explorer (nvim-tree).
-   - `[d` / `]d` jump to previous/next diagnostic.
-   - `<leader>E` opens the floating diagnostic window.
-   - `<leader>q` sends diagnostics to the location list.
-
----
-
-## Credits
-
-- **[Lazy.nvim](https://github.com/folke/lazy.nvim)** by [@folke](https://github.com/folke)
-- **[github/copilot.vim](https://github.com/github/copilot.vim)** by GitHub
-- **[zbirenbaum/copilot.lua](https://github.com/zbirenbaum/copilot.lua)** & **[copilot-cmp](https://github.com/zbirenbaum/copilot-cmp)**
-- **[hrsh7th/nvim-cmp](https://github.com/hrsh7th/nvim-cmp)** & related cmp sources
-- **[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)** for LSP integration
-- **[nvim-tree](https://github.com/nvim-tree/nvim-tree.lua)** / **[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)** / **[LuaSnip](https://github.com/L3MON4D3/LuaSnip)** / **[lualine](https://github.com/nvim-lualine/lualine.nvim)**
-- And language servers: **terraform-ls**, **ansible-language-server**, **bash-language-server**, **docker-langserver**, **yaml-language-server**, **helm-ls**.
-
-Enjoy your enhanced Neovim setup! If you have any questions, feel free to open an issue or reach out.
-```
+### 🔭 Copilot
+*   **Inline Suggestion**: Press `<C-l>` to accept a suggestion.
+*   **Chat**: `<leader>aa` to open the chat window.
+*   **Explain Code**: Select code visually, then run `:CopilotChatExplain`.

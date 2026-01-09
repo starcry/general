@@ -4,15 +4,26 @@
 
 ## Git / Merge Conflict Helpers (normal mode)
 
+
 | Keys | Action |
 |---|---|
+| `<leader>gs` | **Switch branch** (Telescope) or **create new** if name doesn't exist. |
 | `<leader>gB` | **Browse files** from another branch (Telescope). |
-| `<leader>gm` | **Update master** with latest changes from origin. |
-| `<leader>gn` | Create and switch to a **new branch**. |
+| `<leader>gm` | **Update default branch** (main/master) from origin and pull if active. |
 | `<leader>gi` | Open Git diff view (`DiffviewOpen`). |
 | `<leader>go` | Take **ours** for current conflict (`:diffget //2`). |
 | `<leader>gt` | Take **theirs** for current conflict (`:diffget //3`). |
 | `<leader>gd` | **Delete** the entire merge-conflict region under the cursor. |
+
+## Session Management (normal mode)
+
+| Keys | Action |
+|---|---|
+| `<leader>ws` | **Save** current session. |
+| `<leader>wl` | **Load** (restore) session for current directory. |
+| `<leader>wd` | **Wipe** (delete) session for current directory. |
+| `<leader>wr` | **Search** all sessions (Telescope). |
+| `<leader>wt` | **Toggle** session recording. |
 
 ## File Explorer (NvimTree) (normal mode)
 
@@ -102,6 +113,7 @@
 | Key | Action |
 |----|-------|
 | `<leader>gg` | Open as you type git grep floating panel |
+| `<leader>gw` | **Grep word** under cursor (Telescope). |
 
 
 ---
