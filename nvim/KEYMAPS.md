@@ -11,9 +11,12 @@
 | `<leader>gB` | **Browse files** from another branch (Telescope). |
 | `<leader>gm` | **Update default branch** (main/master) from origin and pull if active. |
 | `<leader>gi` | Open Git diff view (`DiffviewOpen`). |
-| `<leader>go` | Take **ours** for current conflict (`:diffget //2`). |
-| `<leader>gt` | Take **theirs** for current conflict (`:diffget //3`). |
+| `<leader>gI` | Open Git diff view vs **default branch** (detected main/master). |
+| `<leader>gmo` | Take **ours** for current conflict (`:diffget //2`). |
+| `<leader>gmt` | Take **theirs** for current conflict (`:diffget //3`). |
 | `<leader>gd` | **Delete** the entire merge-conflict region under the cursor. |
+| `<leader>]m` | jump to next merge. |
+| `<leader>[m` | jump to previous merge. |
 
 ## Session Management (normal mode)
 

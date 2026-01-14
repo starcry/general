@@ -87,37 +87,89 @@ vim.keymap.set("n", "<leader>gi", function()
 end, { desc = "Toggle Diffview" })
 
 -- Take "ours" for current conflict
-vim.keymap.set("n", "<leader>go", ":diffget //2<CR>", { desc = "Take ours" })
---vim.keymap.set("n", "<leader>go", "<cmd>diffget LOCAL<CR>", { desc = "Take ours (LOCAL)" })
--- Take "theirs" for current conflict
-vim.keymap.set("n", "<leader>gt", ":diffget //3<CR>", { desc = "Take theirs" })
---vim.keymap.set("n", "<leader>gt", "<cmd>diffget THEIRS<CR>", { desc = "Take theirs (THEIRS)" })
--- Delete entire conflict
--- Delete the whole conflict region under the cursor
+-- ===== Merge conflict helpers (robust) =====
+
+local function find_conflict_region(bufnr, cursor_line)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local n = #lines
+  local cur = math.max(1, math.min(cursor_line, n))
+
+  local start, mid, finish
+
+  -- Scan upward for <<<<<<<
+  for i = cur, 1, -1 do
+    if lines[i]:match("^<<<<<<<") then
+      start = i
+      break
+    end
+  end
+  if not start then return nil end
+
+  -- Scan downward for ======= and >>>>>>>
+  for i = start + 1, n do
+    if (not mid) and lines[i]:match("^=======") then
+      mid = i
+    elseif lines[i]:match("^>>>>>>>") then
+      finish = i
+      break
+    end
+  end
+
+  if not mid or not finish then return nil end
+  if not (start < mid and mid < finish) then return nil end
+
+  return start, mid, finish
+end
+
+local function resolve_conflict(choice)
+  local bufnr = 0
+  local cur = vim.fn.line(".")
+  local start, mid, finish = find_conflict_region(bufnr, cur)
+  if not start then
+    vim.notify("No merge conflict found around cursor", vim.log.levels.WARN)
+    return
+  end
+
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+  -- Extract ours/theirs (vim.list_slice uses 1-based inclusive indices)
+  local ours   = vim.list_slice(lines, start + 1, mid - 1)
+  local theirs = vim.list_slice(lines, mid + 1, finish - 1)
+
+  local replacement = (choice == "ours") and ours or theirs
+
+  -- Replace the whole conflict block in ONE operation.
+  -- buf_set_lines end index is exclusive, so use finish (line number) as-is.
+  vim.api.nvim_buf_set_lines(bufnr, start - 1, finish, false, replacement)
+
+  vim.notify("Took " .. choice .. " for conflict", vim.log.levels.INFO)
+end
+
+-- Your requested mappings:
+vim.keymap.set("n", "<leader>gmo", function() resolve_conflict("ours") end,   { desc = "Take ours (HEAD)" })
+vim.keymap.set("n", "<leader>gmt", function() resolve_conflict("theirs") end, { desc = "Take theirs (incoming)" })
+
+-- Optional: delete whole conflict region (keep nothing)
 vim.keymap.set("n", "<leader>gd", function()
-  local start_pat = "^<<<<<<<"
-  local mid_pat   = "^======="
-  local end_pat   = "^>>>>>>>"
-
-  -- Find the start of the conflict (searching upwards)
-  local start = vim.fn.search(start_pat, "bnW")
-  if start == 0 then
-    vim.notify("No conflict start found above cursor", vim.log.levels.WARN)
+  local bufnr = 0
+  local cur = vim.fn.line(".")
+  local start, _, finish = find_conflict_region(bufnr, cur)
+  if not start then
+    vim.notify("No merge conflict found around cursor", vim.log.levels.WARN)
     return
   end
-
-  -- Find the end of the conflict (searching downwards)
-  local finish = vim.fn.search(end_pat, "nW")
-  if finish == 0 then
-    vim.notify("No conflict end found below cursor", vim.log.levels.WARN)
-    return
-  end
-
-  -- Delete everything between start and finish (inclusive)
-  vim.api.nvim_buf_set_lines(0, start - 1, finish, false, {})
-
-  vim.notify("Conflict region deleted", vim.log.levels.INFO)
+  vim.api.nvim_buf_set_lines(bufnr, start - 1, finish, false, {})
+  vim.notify("Deleted conflict region", vim.log.levels.INFO)
 end, { desc = "Delete merge conflict region" })
+
+-- Jump to next/prev merge conflict marker
+vim.keymap.set("n", "]m", function()
+  vim.fn.search([[^\(<\{7}\|=\{7}\|>\{7}\)]], "W")
+end, { desc = "Next merge conflict marker" })
+
+vim.keymap.set("n", "[m", function()
+  vim.fn.search([[^\(<\{7}\|=\{7}\|>\{7}\)]], "bW")
+end, { desc = "Prev merge conflict marker" })
 
 -- Telescope Git search (Tracked files only)
 vim.keymap.set("n", "<leader>gg", function()

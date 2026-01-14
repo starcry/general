@@ -83,7 +83,8 @@ Flash is installed but often forgotten.
 ### 🪵 Git Magic
 *   **Full Magit Experience**: Run `:Neogit` to open a full git status window where you can stage hunks (`s`), commit (`c`), push (`P`), etc.
 *   **Detailed History**: `:DiffviewFileHistory` shows the history of the current file.
-*   **Resolve Conflicts**: `:DiffviewOpen` opens a 3-way merge view.
+*   **Resolve Conflicts**: `:DiffviewOpen` (mapped to `<leader>gi`) opens a 3-way merge view.
+*   **Diff vs Main**: `<leader>gI` opens a diff view against the detected default branch (main/master).
 
 ### SESSION MANAGEMENT
 *   **Switch Project**: `<leader>wr` (Search Sessions)
