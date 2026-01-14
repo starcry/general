@@ -85,14 +85,15 @@ function inssec() {
   printf "instance $INSID has security groups\n$SGIDS"; echo
   for i in $SGIDS; do
     echo "rules for $i"
-    aws ec2 describe-security-group-rules --filters "Name=group-id,Values=$i" --query 'SecurityGroupRules[*].[IsEgress,FromPort,ToPort,CidrIpv4,Description]' --output text | \
-      awk '$1 == "False"' | \
-      cut -f2- | \
-      sed '1i FromPort ToPort CidrIpv4 Description' | \
-      column --table
-    # inssec i-0cbffe08369061686 | grep -v "rules for sg-\|FromPort.*ToPort.*CidrIpv4\|instance.*i-" | grep . | awk '{print $1, $2, $3}' | sort -u | column --table
+    aws ec2 describe-security-group-rules --filters "Name=group-id,Values=$i" --query 'SecurityGroupRules[*].[IsEgress,FromPort,ToPort,CidrIpv4,Description]' --output text
     echo
-  done | grep -v "rules for sg-\|FromPort.*ToPort.*CidrIpv4\|instance.*i-" | grep . | awk '{print $1, $2, $3}' | sort -u | column --table
+  done | \
+    sort -u | \
+    grep -v "rules for sg-\|instance.*i-" | \
+    awk '$1 == "False"' | \
+    cut -f2- | \
+    sed '1i FromPort\tToPort\tCidrIpv4\tDescription' | \
+    column -t -s $'\t'
 }
 
 
