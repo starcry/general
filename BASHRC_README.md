@@ -1,5 +1,7 @@
 | Command             | What it does                                                                                     | Example                                      |
+|---------|--------------|---------|
 | ------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------- |
+|---------|--------------|---------|
 | `ms`                | Start Minikube and enable Ingress addon.                                                         | `ms`                                         |
 |---------|--------------|---------|
 | `gl`                | Pretty Git graph log.                                                                            | `gl`                                         |
@@ -125,3 +127,12 @@
 | `flash_screen`      | Briefly invert terminal screen (visual flash).                                                   | `flash_screen`                               |
 |---------|--------------|---------|
 | `whatismyip`        | Show your public IP address (OpenDNS).                                                           | `whatismyip`                                 |
+|---------|--------------|---------|
+| `bh`                | View BASHRC_README.md in a popup or pager.                                                       | `bh`                                         |
+|---------|--------------|---------|
+| `je`                | JSON Extract: Run jq query on a file.                                                            | `je file.json data.items`                    |
+|---------|--------------|---------|
+| `gd`                | Git format-patch from origin/master..HEAD to /tmp/patches.                                       | `gd`                                         |
+|---------|--------------|---------|
+| `tmux_insert_window`| Insert a tmux window at a specific index.                                                        | `tmux_insert_window 3`                       |
+|---------|--------------|---------|
