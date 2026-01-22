@@ -15,6 +15,8 @@
 | `<leader>gmo` | Take **ours** for current conflict (`:diffget //2`). |
 | `<leader>gmt` | Take **theirs** for current conflict (`:diffget //3`). |
 | `<leader>gd` | **Delete** the entire merge-conflict region under the cursor. |
+| `<leader>gb` | **Git Blame** (full line info). |
+| `<leader>tb` | **Toggle Blame** (inline ghost text). |
 | `<leader>]m` | jump to next merge. |
 | `<leader>[m` | jump to previous merge. |
 
@@ -72,9 +74,9 @@
 | `<C-k>` | Show **signature help**. |
 | `K` | Show **hover** information. |
 | `gr` | Show **references**. |
-| `<leader>wa` | **Add** workspace folder. |
-| `<leader>wr` | **Remove** workspace folder. |
-| `<leader>wl` | **List** workspace folders (prints to message area). |
+| `<leader>Wa` | **Add** workspace folder. |
+| `<leader>Wr` | **Remove** workspace folder. |
+| `<leader>Wl` | **List** workspace folders (prints to message area). |
 | `<leader>ca` (n/v) | **Code actions**. |
 | `<leader>rn` | **Rename** symbol. |
 | `<leader>f` | **Format** buffer (async). |

@@ -433,3 +433,35 @@ alias gr="git reset --hard HEAD"
 alias gd='git format-patch -o /tmp/patches origin/master..HEAD'
 
 export VAGRANT_DEFAULT_PROVIDER=libvirt
+
+function tmux_insert_window() {
+    local target_idx=$1
+    if [ -z "$target_idx" ]; then
+        echo "Usage: tmux_insert_window <target-index>"
+        return 1
+    fi
+
+    local current_id=$(tmux display-message -p '#{window_id}')
+    local current_idx=$(tmux display-message -p '#{window_index}')
+
+    # If target is same as current, do nothing
+    if [ "$target_idx" -eq "$current_idx" ]; then
+        return 0
+    fi
+
+    # 1. Get list of all window indices in reverse order
+    local indices=$(tmux list-windows -F '#{window_index}' | sort -rn)
+
+    # 2. Shift windows up to make a gap
+    for idx in $indices; do
+        if [ "$idx" -ge "$target_idx" ] && [ "$idx" -ne "$current_idx" ]; then
+            local new_idx=$((idx + 1))
+            tmux move-window -s "$idx" -t "$new_idx"
+        fi
+    done
+
+    # 3. Move current window to the target
+    tmux move-window -s "$current_id" -t "$target_idx"
+    tmux select-window -t "$target_idx"
+}
+

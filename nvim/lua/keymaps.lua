@@ -86,6 +86,33 @@ vim.keymap.set("n", "<leader>gi", function()
   end
 end, { desc = "Toggle Diffview" })
 
+-- Open Git diff view against default branch (main/master)
+vim.keymap.set("n", "<leader>gI", function()
+  local ok, diffview = pcall(require, "diffview")
+  if not ok then
+    vim.notify("diffview.nvim not installed", vim.log.levels.ERROR)
+    return
+  end
+
+  local function get_default_branch()
+    local res_main = vim.system({ "git", "rev-parse", "--verify", "main" }):wait()
+    if res_main.code == 0 then return "main" end
+    local res_master = vim.system({ "git", "rev-parse", "--verify", "master" }):wait()
+    if res_master.code == 0 then return "master" end
+    return nil
+  end
+
+  local default = get_default_branch()
+  if not default then
+    vim.notify("Could not detect 'main' or 'master' branch", vim.log.levels.ERROR)
+    return
+  end
+  
+  -- Open Diffview comparing default branch...HEAD
+  diffview.open({ default .. "...HEAD" })
+  vim.notify("Diffview open against " .. default, vim.log.levels.INFO)
+end, { desc = "Diffview vs default branch" })
+
 -- Take "ours" for current conflict
 -- ===== Merge conflict helpers (robust) =====
 
@@ -234,9 +261,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts) -- Show references
 
     -- Workspace Management
-    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts) -- Add workspace folder
-    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts) -- Remove workspace folder
-    vim.keymap.set('n', '<leader>wl', function()
+    vim.keymap.set('n', '<leader>Wa', vim.lsp.buf.add_workspace_folder, opts) -- Add workspace folder
+    vim.keymap.set('n', '<leader>Wr', vim.lsp.buf.remove_workspace_folder, opts) -- Remove workspace folder
+    vim.keymap.set('n', '<leader>Wl', function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, opts) -- List workspace folders
 
