@@ -134,5 +134,8 @@
 |---------|--------------|---------|
 | `gd`                | Git format-patch from origin/master..HEAD to /tmp/patches.                                       | `gd`                                         |
 |---------|--------------|---------|
-| `tmux_insert_window`| Insert a tmux window at a specific index.                                                        | `tmux_insert_window 3`                       |
+|---------|--------------|---------|
+| `<prefix> Q`        | **Smart Save & Quit:** Saves Neovim sessions, saves Tmux session, and kills server. | `<prefix> Q`                                 |
+|---------|--------------|---------|
+| `<prefix> + Ctrl-r` | **Restore Session:** Restores the last saved Tmux environment (and Neovim sessions). | `<prefix> + Ctrl-r`                          |
 |---------|--------------|---------|
