@@ -24,6 +24,7 @@ vim.lsp.config('yamlls', {
 vim.lsp.config('terraformls', {
   cmd = { 'terraform-ls', 'serve' },
   filetypes = { 'terraform', 'terraform-vars', 'tf', 'hcl' },
+  root_markers = { '.terraform', '.git' },
   init_options = {
     experimentalFeatures = { validateOnSave = true },
   },

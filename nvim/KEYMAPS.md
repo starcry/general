@@ -20,6 +20,18 @@
 | `<leader>]m` | jump to next merge. |
 | `<leader>[m` | jump to previous merge. |
 
+## Diffview Navigation (File Panel)
+
+| Keys | Action |
+|---|---|
+| `<CR>` | Open file in **diff view** (Split). |
+| `gf` | Open file in **new tab** (Normal Neovim buffer). |
+| `-` | Toggle folder collapse. |
+| `q` | Close Diffview. |
+| `[x` | Jump to **previous** conflict (Diffview). |
+| `]x` | Jump to **next** conflict (Diffview). |
+
+
 ## Session Management (normal mode)
 
 | Keys | Action |
@@ -27,8 +39,8 @@
 | `<leader>ws` | **Save** current session. |
 | `<leader>wl` | **Load** (restore) session for current directory. |
 | `<leader>wd` | **Wipe** (delete) session for current directory. |
-| `<leader>wr` | **Search** all sessions (Telescope). |
-| `<leader>wt` | **Toggle** session recording. |
+| `<leader>wr` | **Search** all sessions. Type `<C-d>` to delete the highlighted session. |
+| `<leader>wt` | **Toggle** session auto-saving. |
 
 ## File Explorer (NvimTree) (normal mode)
 

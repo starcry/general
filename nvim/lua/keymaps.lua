@@ -87,6 +87,32 @@ vim.keymap.set("n", "<leader>gi", function()
 end, { desc = "Toggle Diffview" })
 
 -- Open Git diff view against default branch (main/master)
+--vim.keymap.set("n", "<leader>gI", function()
+--  local ok, diffview = pcall(require, "diffview")
+--  if not ok then
+--    vim.notify("diffview.nvim not installed", vim.log.levels.ERROR)
+--    return
+--  end
+--
+--  local function get_default_branch()
+--    local res_main = vim.system({ "git", "rev-parse", "--verify", "main" }):wait()
+--    if res_main.code == 0 then return "main" end
+--    local res_master = vim.system({ "git", "rev-parse", "--verify", "master" }):wait()
+--    if res_master.code == 0 then return "master" end
+--    return nil
+--  end
+--
+--  local default = get_default_branch()
+--  if not default then
+--    vim.notify("Could not detect 'main' or 'master' branch", vim.log.levels.ERROR)
+--    return
+--  end
+--
+--  -- Open Diffview comparing default branch...HEAD
+--  diffview.open({ default .. "...HEAD" })
+--  vim.notify("Diffview open against " .. default, vim.log.levels.INFO)
+--end, { desc = "Diffview vs default branch" })
+
 vim.keymap.set("n", "<leader>gI", function()
   local ok, diffview = pcall(require, "diffview")
   if not ok then
@@ -107,11 +133,9 @@ vim.keymap.set("n", "<leader>gI", function()
     vim.notify("Could not detect 'main' or 'master' branch", vim.log.levels.ERROR)
     return
   end
-  
-  -- Open Diffview comparing default branch...HEAD
+
   diffview.open({ default .. "...HEAD" })
-  vim.notify("Diffview open against " .. default, vim.log.levels.INFO)
-end, { desc = "Diffview vs default branch" })
+end, { desc = "Diffview: current branch vs main/master" })
 
 -- Take "ours" for current conflict
 -- ===== Merge conflict helpers (robust) =====
@@ -253,7 +277,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
 
     -- LSP Actions
-    --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts) -- Go to definition
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts) -- Go to definition
+    vim.keymap.set('n', '<leader>df', vim.lsp.buf.definition, opts) -- Go to definition (alias)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts) -- Go to declaration
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts) -- Go to implementation
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts) -- Show function signature

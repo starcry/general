@@ -190,6 +190,9 @@ require("lazy").setup({
   "towolf/vim-helm", ft = "helm"  -- Helm syntax highlighting
   },
   {
+    "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
+  },
+  {
     "neovim/nvim-lspconfig"  -- LSP configurations
   },
 
@@ -323,7 +326,7 @@ require("lazy").setup({
     ---@type AutoSession.Config
     opts = {
       auto_save = false,
-      auto_restore = false,
+      auto_restore = true,
       suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
       -- log_level = 'debug',
     },
