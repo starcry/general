@@ -98,3 +98,10 @@ Flash is installed but often forgotten.
 *   **Inline Suggestion**: Press `<C-l>` to accept a suggestion.
 *   **Chat**: `<leader>aa` to open the chat window.
 *   **Explain Code**: Select code visually, then run `:CopilotChatExplain`.
+
+### 👽 Avante (Cursor-like AI)
+*   **Open AI Sidebar**: `<leader>aa` (Ask)
+*   **Edit Selection**: `<leader>ae` (Edit)
+*   **Refresh**: `<leader>ar`
+*   **Toggle Sidebar**: `<leader>aa`
+*   **Accept Edit**: Apply suggestion with `Apply` in the chat or press the key shown in the UI.
