@@ -139,3 +139,80 @@
 - Some mappings (e.g., LSP ones) are set only when a language server is attached, so they won’t be active in all buffers.
 - Clipboard mappings use the `+` (system) register, so make sure Neovim is built with clipboard support on your OS.
 
+## Plugin Mappings & Useful Defaults
+
+### Flash.nvim
+| Keys | Action |
+|---|---|
+| `s` (n/x/o) | Flash jump (search anywhere) |
+| `S` (n/x/o) | Flash jump (treesitter) |
+| `r` (o) | Remote Flash |
+| `R` (o/x) | Treesitter Search |
+| `<C-s>` (c) | Toggle Flash Search |
+
+### nvim-surround
+| Keys | Action |
+|---|---|
+| `ys` (n) | Add surround |
+| `cs` (n) | Change surround |
+| `ds` (n) | Delete surround |
+| `S` (v) | Surround visual selection |
+
+### nvim-tree (File Explorer)
+| Keys | Action |
+|---|---|
+| `<CR>` | Open file |
+| `o` | Open file |
+| `v` | Open file in vertical split |
+| `s` | Open file in horizontal split |
+| `C` | Collapse all |
+| `R` | Refresh |
+| `a` | Create file/directory |
+| `d` | Delete |
+| `r` | Rename |
+| `x` | Cut |
+| `c` | Copy |
+| `p` | Paste |
+| `y` | Copy name |
+| `gy` | Copy path |
+| `m` (v) | Bulk mark files (custom) |
+| `q` | Close NvimTree |
+| `?` | Help |
+| `<Tab>` | Next item |
+| `<S-Tab>` | Previous item |
+| `<BS>` | Parent directory |
+| `<Esc>` | Exit |
+| `gg` | First item |
+| `G` | Last item |
+| `zh` | Fold |
+| `zl` | Unfold |
+| `zM` | Fold all |
+| `zR` | Unfold all |
+| `H` | Toggle hidden |
+| `L` | Toggle git-ignored |
+| `J` | Next sibling |
+| `K` | Previous sibling |
+| `[`/`]` | Jump to prev/next |
+
+### Gitsigns
+| Keys | Action |
+|---|---|
+| `[c` | Previous hunk |
+| `]c` | Next hunk |
+| `:Gitsigns stage_hunk` | Stage hunk |
+| `:Gitsigns undo_stage_hunk` | Undo stage hunk |
+| `:Gitsigns reset_hunk` | Reset hunk |
+| `:Gitsigns preview_hunk` | Preview hunk |
+
+### nvim-cmp (Completion)
+| Keys | Action |
+|---|---|
+| `<Tab>` | Next completion item |
+| `<S-Tab>` | Previous completion item |
+| `<CR>` | Confirm selection |
+
+### Telescope
+| Keys | Action |
+|---|---|
+| `<C-q>` (i) | Send selection to quickfix list |
+

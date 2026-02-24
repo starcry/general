@@ -5,7 +5,17 @@ export EDITOR="$VISUAL"
 alias ms="minikube start; minikube addons enable ingress"
 
 alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias gdm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit master.."
+function _git_default_branch() {
+  git rev-parse --verify main &>/dev/null && echo main && return
+  git rev-parse --verify master &>/dev/null && echo master && return
+  echo "Error: could not detect default branch (main or master)" >&2
+  return 1
+}
+
+function gdm() {
+  local default=$(_git_default_branch) || return 1
+  git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "$default.."
+}
 alias gs="git status"
 alias gat="git ls-files --modified | xargs git add"
 function gaa() {
@@ -430,7 +440,10 @@ je() {
 }
 
 alias gr="git reset --hard HEAD"
-alias gd='git format-patch -o /tmp/patches origin/master..HEAD'
+function gd() {
+  local default=$(_git_default_branch) || return 1
+  git format-patch -o /tmp/patches "origin/$default..HEAD"
+}
 
 export VAGRANT_DEFAULT_PROVIDER=libvirt
 

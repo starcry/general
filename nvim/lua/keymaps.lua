@@ -134,7 +134,7 @@ vim.keymap.set("n", "<leader>gI", function()
     return
   end
 
-  diffview.open({ default .. "...HEAD" })
+  diffview.open({ default })
 end, { desc = "Diffview: current branch vs main/master" })
 
 -- Take "ours" for current conflict
@@ -240,9 +240,24 @@ end, { desc = "Grep word under cursor (tracked)" })
 
 vim.keymap.set("n", "<leader>gr", ":GitGrepRoot<CR>", { desc = "Git grep from repo root" })
 
+-- Tab Management
+vim.keymap.set("n", "<leader>tc", ":tabnew<CR>", { desc = "Create new tab" })
+vim.keymap.set("n", "<leader>td", ":tabclose<CR>", { desc = "Close current tab" })
+vim.keymap.set("n", "<leader>tn", ":tabnext<CR>", { desc = "Next tab" })
+vim.keymap.set("n", "<leader>tp", ":tabprevious<CR>", { desc = "Previous tab" })
+
 -- Keybinding to Toggle File Explorer (NvimTree)
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>r", ":NvimTreeRefresh<CR>", { noremap = true, silent = true })
+
+-- Jump to window by number (prompts for input)
+vim.keymap.set("n", "<leader>ef", function()
+  vim.ui.input({ prompt = "Jump to window: " }, function(input)
+    local n = tonumber(input)
+    if n then vim.cmd(n .. "wincmd w") end
+  end)
+end, { desc = "Jump to window number" })
+
 
 -- Diagnostic Navigation (Floating Window, Previous/Next, List)
 vim.keymap.set('n', '<leader>E', vim.diagnostic.open_float) -- Capital E to avoid conflict with NvimTree

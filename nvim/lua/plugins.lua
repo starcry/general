@@ -181,8 +181,13 @@ require("lazy").setup({
     config = function()
       require('lualine').setup({
         sections = {
-          lualine_c = { { 'filename', path = 2 } }
-        }
+          lualine_c = { { 'filename', path = 2 } },
+          lualine_x = { function() return 'win ' .. vim.fn.winnr() end, 'encoding', 'fileformat', 'filetype' },
+        },
+        inactive_sections = {
+          lualine_c = { { 'filename', path = 2 } },
+          lualine_x = { function() return 'win ' .. vim.fn.winnr() end },
+        },
       })
     end
   },
@@ -415,8 +420,13 @@ require("lazy").setup({
 
 require('lualine').setup({
   sections = {
-    lualine_c = { { 'filename', path = 2 } } -- 1 = Relative Path, 2 = Absolute Path
-  }
+    lualine_c = { { 'filename', path = 2 } }, -- 1 = Relative Path, 2 = Absolute Path
+    lualine_x = { function() return 'win ' .. vim.fn.winnr() end, 'encoding', 'fileformat', 'filetype' },
+  },
+  inactive_sections = {
+    lualine_c = { { 'filename', path = 2 } },
+    lualine_x = { function() return 'win ' .. vim.fn.winnr() end },
+  },
 })
 
 require("nvim-treesitter.configs").setup({

@@ -124,18 +124,20 @@
 |---------|--------------|---------|
 | `fc`                | Copy a file’s contents to clipboard.                                                             | `fc README.md`                               |
 |---------|--------------|---------|
-| `flash_screen`      | Briefly invert terminal screen (visual flash).                                                   | `flash_screen`                               |
+| `flash_screen`      | Briefly invert terminal screen (visual flash). (Implemented for both cursor hide/show and simple invert.) | `flash_screen`                               |
 |---------|--------------|---------|
 | `whatismyip`        | Show your public IP address (OpenDNS).                                                           | `whatismyip`                                 |
 |---------|--------------|---------|
-| `bh`                | View BASHRC_README.md in a popup or pager.                                                       | `bh`                                         |
+| `bh`                | View BASHRC_README.md in a popup or pager (uses glow, bat, or less; tmux popup if available).    | `bh`                                         |
 |---------|--------------|---------|
 | `je`                | JSON Extract: Run jq query on a file.                                                            | `je file.json data.items`                    |
 |---------|--------------|---------|
-| `gd`                | Git format-patch from origin/master..HEAD to /tmp/patches.                                       | `gd`                                         |
+| `gd`                | Create format-patch files from origin/default branch to HEAD in /tmp/patches.                    | `gd`                                         |
 |---------|--------------|---------|
 |---------|--------------|---------|
 | `<prefix> Q`        | **Smart Save & Quit:** Saves Neovim sessions, saves Tmux session, and kills server. | `<prefix> Q`                                 |
 |---------|--------------|---------|
 | `<prefix> + Ctrl-r` | **Restore Session:** Restores the last saved Tmux environment (and Neovim sessions). | `<prefix> + Ctrl-r`                          |
 |---------|--------------|---------|
+| `<prefix> N`        | **Insert Window:** Prompts for index and inserts current tmux window at that index (uses tmux_insert_window from bashrc). | `<prefix> N`                                 |
+| `<prefix> r`        | **Rename Window:** Renames tmux window to current directory name. | `<prefix> r`                                 |
