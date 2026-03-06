@@ -222,10 +222,66 @@ vim.keymap.set("n", "[m", function()
   vim.fn.search([[^\(<\{7}\|=\{7}\|>\{7}\)]], "bW")
 end, { desc = "Prev merge conflict marker" })
 
+-- Helper: attach_mappings function for Telescope pickers that uses window-picker
+-- to let the user choose which split to open the file in (when multiple exist).
+local function telescope_pick_window(prompt_bufnr, map)
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local function pick_and_open()
+    local entry = action_state.get_selected_entry()
+    if not entry then return end
+
+    local filepath = entry.path or entry.filename or entry.value
+    if not filepath then return end
+
+    actions.close(prompt_bufnr)
+
+    vim.schedule(function()
+      -- Count eligible windows (skip NvimTree, special buftypes, etc.)
+      local eligible = {}
+      for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local ft = vim.bo[buf].filetype
+        local bt = vim.bo[buf].buftype
+        if bt == "" and ft ~= "NvimTree" and ft ~= "neo-tree" and ft ~= "notify" and ft ~= "noice" then
+          table.insert(eligible, win)
+        end
+      end
+
+      -- DEBUG: remove this line once window picker is confirmed working
+      vim.notify("[WindowPicker] eligible windows: " .. #eligible, vim.log.levels.INFO)
+
+      if #eligible > 1 then
+        local ok, picker = pcall(require, "window-picker")
+        if ok then
+          local picked = picker.pick_window()
+          if picked then
+            vim.api.nvim_set_current_win(picked)
+          else
+            return -- user cancelled
+          end
+        else
+          vim.notify("[WindowPicker] plugin not found!", vim.log.levels.ERROR)
+        end
+      elseif #eligible == 1 then
+        vim.api.nvim_set_current_win(eligible[1])
+      end
+
+      vim.cmd("edit " .. vim.fn.fnameescape(filepath))
+    end)
+  end
+
+  map("i", "<CR>", pick_and_open)
+  map("n", "<CR>", pick_and_open)
+  return true
+end
+
 -- Telescope Git search (Tracked files only)
 vim.keymap.set("n", "<leader>gg", function()
   require("telescope.builtin").live_grep({
     vimgrep_arguments = { "git", "grep", "-n", "--column" },
+    attach_mappings = telescope_pick_window,
   })
 end, { desc = "Git grep (tracked files only)" })
 
@@ -234,9 +290,17 @@ vim.keymap.set("n", "<leader>gw", function()
   require("telescope.builtin").live_grep({
     vimgrep_arguments = { "git", "grep", "-n", "--column" },
     default_text = vim.fn.expand("<cword>"),
-    initial_mode = "normal", -- Optional: start in normal mode if searching word? No, let's keep insert to edit.
+    attach_mappings = telescope_pick_window,
   })
 end, { desc = "Grep word under cursor (tracked)" })
+
+-- Find files by name (fuzzy search)
+vim.keymap.set("n", "<leader>sf", function()
+  require("telescope.builtin").find_files({
+    cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1] or vim.loop.cwd(),
+    attach_mappings = telescope_pick_window,
+  })
+end, { desc = "Find file by name (Telescope)" })
 
 vim.keymap.set("n", "<leader>gr", ":GitGrepRoot<CR>", { desc = "Git grep from repo root" })
 

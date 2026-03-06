@@ -302,6 +302,25 @@ require("lazy").setup({
     build = "make",
   },
   {
+    "s1n7ax/nvim-window-picker",
+    name = "window-picker",
+    event = "VeryLazy",
+    version = "2.*",
+    config = function()
+      require("window-picker").setup({
+        hint = "floating-big-letter",
+        include_current_win = true,
+        autoselect_one = false,
+        filter_rules = {
+          bo = {
+            filetype = { "NvimTree", "neo-tree", "notify", "noice" },
+            buftype = { "terminal", "quickfix" },
+          },
+        },
+      })
+    end,
+  },
+  {
     "sindrets/diffview.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()

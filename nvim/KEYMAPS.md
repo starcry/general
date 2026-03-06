@@ -131,6 +131,7 @@
 |----|-------|
 | `<leader>gg` | Open as you type git grep floating panel |
 | `<leader>gw` | **Grep word** under cursor (Telescope). |
+| `<leader>sf` | **Find file** by name (Telescope fuzzy finder). |
 
 
 ---
@@ -215,4 +216,5 @@
 | Keys | Action |
 |---|---|
 | `<C-q>` (i) | Send selection to quickfix list |
+| `<CR>` (i/n) | Open file — **prompts to pick a window** when multiple splits are open |
 
