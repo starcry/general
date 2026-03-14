@@ -478,3 +478,4 @@ function tmux_insert_window() {
     tmux select-window -t "$target_idx"
 }
 
+export PATH="$PATH:/home/aidan/git/general/scripts/python/dist"

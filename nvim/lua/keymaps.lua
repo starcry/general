@@ -250,7 +250,7 @@ local function telescope_pick_window(prompt_bufnr, map)
       end
 
       -- DEBUG: remove this line once window picker is confirmed working
-      vim.notify("[WindowPicker] eligible windows: " .. #eligible, vim.log.levels.INFO)
+      --vim.notify("[WindowPicker] eligible windows: " .. #eligible, vim.log.levels.INFO)
 
       if #eligible > 1 then
         local ok, picker = pcall(require, "window-picker")
@@ -309,6 +309,9 @@ vim.keymap.set("n", "<leader>tc", ":tabnew<CR>", { desc = "Create new tab" })
 vim.keymap.set("n", "<leader>td", ":tabclose<CR>", { desc = "Close current tab" })
 vim.keymap.set("n", "<leader>tn", ":tabnext<CR>", { desc = "Next tab" })
 vim.keymap.set("n", "<leader>tp", ":tabprevious<CR>", { desc = "Previous tab" })
+for i = 1, 9 do
+  vim.keymap.set("n", "<leader>t" .. i, i .. "gt", { desc = "Go to tab " .. i })
+end
 
 -- Keybinding to Toggle File Explorer (NvimTree)
 vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
@@ -342,12 +345,15 @@ vim.keymap.set("n", "<leader>D", '"+D', { desc = "Cut line to system clipboard" 
 vim.keymap.set({ "n", "x" }, "<leader>p", '"+p', { desc = "Paste from system clipboard (after cursor)" })
 vim.keymap.set({ "n", "x" }, "<leader>P", '"+P', { desc = "Paste from system clipboard (before cursor)" })
 
--- Prevent Mouse Clicks from Moving Cursor
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    vim.cmd("nnoremap <LeftMouse> :<C-U>echo 'Mouse Click Disabled'<CR>")
-  end,
-})
+-- Prevent Mouse Clicks from Moving Cursor (but allow tabline clicks for tab switching)
+vim.keymap.set("n", "<LeftMouse>", function()
+  local pos = vim.fn.getmousepos()
+  if pos.line == 0 then
+    -- Click was on the tabline/statusline — let it through
+    vim.cmd('execute "normal! \\<LeftMouse>"')
+  end
+  -- Otherwise do nothing (prevents cursor jumping when clicking in editor)
+end, { noremap = true })
 
 -- Use LspAttach autocommand to only map keys after an LSP server attaches
 vim.api.nvim_create_autocmd('LspAttach', {

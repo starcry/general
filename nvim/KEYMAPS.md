@@ -49,6 +49,13 @@
 | `<leader>e` | Toggle file explorer (`NvimTreeToggle`). |
 | `<leader>r` | Refresh file explorer (`NvimTreeRefresh`). |
 
+## Window Navigation (normal mode)
+
+| Keys | Action |
+|---|---|
+| `<leader>ef` | Prompt for a window number, then jump to that window (uses `:Nwincmd w`). |
+| `N<C-w>w` | Built-in Neovim jump to window number `N` (example: `3<C-w>w`). |
+
 ## Diagnostics (LSP/Neovim) (normal mode)
 
 | Keys | Action |
@@ -133,6 +140,17 @@
 | `<leader>gw` | **Grep word** under cursor (Telescope). |
 | `<leader>sf` | **Find file** by name (Telescope fuzzy finder). |
 
+
+## Tab Management (normal mode)
+
+| Keys | Action |
+|---|---|
+| `<leader>tc` | Create **new tab**. |
+| `<leader>td` | **Close** current tab. |
+| `<leader>tn` | Go to **next** tab. |
+| `<leader>tp` | Go to **previous** tab. |
+| `<leader>t1` ... `<leader>t9` | Jump directly to tab **1-9**. |
+| `Ngt` | Built-in Neovim tab jump (example: `3gt` goes to tab 3). |
 
 ---
 
