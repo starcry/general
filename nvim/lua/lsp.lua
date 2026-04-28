@@ -43,7 +43,7 @@ vim.lsp.config('ansiblels', {
   cmd = { 'ansible-language-server', '--stdio' },
   filetypes = { 'yaml', 'yaml.ansible', 'yml' },
   -- Prefer root markers over the old util.root_pattern
-  root_markers = { 'ansible.cfg', '.ansible-lint', '.git' },
+  root_markers = { 'ansible.cfg', '.ansible-lint' },
   settings = {
     ansible = {
       python = { interpreterPath = 'python' },

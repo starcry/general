@@ -6,6 +6,7 @@ UID=${UID:-0}
 GUI=${GUI:-0}
 
 if [ ! -f "$PRIVATE_KEY" ]; then
+  mkdir -p $KEYS_PATH
   /usr/bin/ssh-keygen -q -t rsa -N '' -f $PRIVATE_KEY
   chmod 700 $KEYS_PATH
   chmod 644 $PUBLIC_KEY

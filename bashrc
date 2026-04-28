@@ -1,4 +1,4 @@
-export VISUAL=vim
+export VISUAL=nvim
 export EDITOR="$VISUAL"
 
 #alias ms="minikube start --extra-config=controller-manager.HorizontalPodAutoscalerUseRESTClients=true; minikube addons enable ingress"
