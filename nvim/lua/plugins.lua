@@ -131,13 +131,13 @@ require("lazy").setup({
   },
 
   -- Treesitter (Better Syntax Highlighting & Indentation)
-  {
-    "nvim-treesitter/nvim-treesitter", opts = {
-      ensure_installed = { "lua", "bash", "terraform", "yaml", "dockerfile", "go", "json" },
-      highlight = { enable = true },
-      indent = { enable = true }
-    }
-  },
+--  {
+--    "nvim-treesitter/nvim-treesitter", opts = {
+--      ensure_installed = { "lua", "bash", "terraform", "yaml", "dockerfile", "go", "json" },
+--      highlight = { enable = true },
+--      indent = { enable = true }
+--    }
+--  },
 
   -- UI Enhancements (File Explorer)
 --  {"nvim-tree/nvim-tree.lua"},
@@ -146,7 +146,17 @@ require("lazy").setup({
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
   {"nvim-tree/nvim-web-devicons"}, -- Dependency for nvim-tree
-  { "nvim-treesitter/playground" },
+  -- { "nvim-treesitter/playground" },  -- DISABLED: requires nvim-treesitter
+--    {
+--      "MeanderingProgrammer/render-markdown.nvim",
+--      ft = { "markdown", "Avante" },
+--      opts = { file_types = { "markdown", "Avante" } },
+--    },
+  {
+    "plasticboy/vim-markdown",
+    ft = { "markdown" },
+    dependencies = { "godlygeek/tabular" },
+  },
   { "L3MON4D3/LuaSnip" },
 --  { "github/copilot.vim" },
   {
@@ -417,14 +427,6 @@ require("lazy").setup({
           },
         },
       },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          file_types = { "markdown", "Avante" },
-        },
-        ft = { "markdown", "Avante" },
-      },
     },
   }
 }, {
@@ -448,11 +450,11 @@ require('lualine').setup({
   },
 })
 
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "yaml", "json", "bash", "go", "lua", "dockerfile", "terraform" },
-  highlight = { enable = true },
-  indent = { enable = true },
-})
+--require("nvim-treesitter.configs").setup({
+--  ensure_installed = { "yaml", "json", "bash", "go", "lua", "dockerfile", "terraform" },
+--  highlight = { enable = true },
+--  indent = { enable = true },
+--})
 
 local telescope = require("telescope")
 local actions = require("telescope.actions")

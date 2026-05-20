@@ -28,7 +28,7 @@ require("keymaps")
 require("settings")
 require("ui")
 require("copilot_native")
-require("treesitter")
+-- require("treesitter")  -- DISABLED: treesitter ABI mismatch
 require("git")
 
 
