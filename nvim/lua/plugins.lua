@@ -130,14 +130,25 @@ require("lazy").setup({
     end
   },
 
-  -- Treesitter (Better Syntax Highlighting & Indentation)
---  {
---    "nvim-treesitter/nvim-treesitter", opts = {
---      ensure_installed = { "lua", "bash", "terraform", "yaml", "dockerfile", "go", "json" },
---      highlight = { enable = true },
---      indent = { enable = true }
---    }
---  },
+  -- Treesitter (including Markdown sticky heading context)
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "markdown", "markdown_inline" },
+        highlight = { enable = true },
+      })
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    opts = {
+      enable = true,
+      max_lines = 3,
+      multiline_threshold = 20,
+    },
+  },
 
   -- UI Enhancements (File Explorer)
 --  {"nvim-tree/nvim-tree.lua"},
@@ -146,17 +157,18 @@ require("lazy").setup({
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
   {"nvim-tree/nvim-web-devicons"}, -- Dependency for nvim-tree
-  -- { "nvim-treesitter/playground" },  -- DISABLED: requires nvim-treesitter
---    {
---      "MeanderingProgrammer/render-markdown.nvim",
---      ft = { "markdown", "Avante" },
---      opts = { file_types = { "markdown", "Avante" } },
---    },
-  {
-    "plasticboy/vim-markdown",
-    ft = { "markdown" },
-    dependencies = { "godlygeek/tabular" },
-  },
+  -- { "nvim-treesitter/playground" },  -- Optional with nvim-treesitter
+  -- Markdown-specific plugins disabled in favor of Treesitter handling:
+  -- {
+  --   "MeanderingProgrammer/render-markdown.nvim",
+  --   ft = { "markdown", "Avante" },
+  --   opts = { file_types = { "markdown", "Avante" } },
+  -- },
+  -- {
+  --   "plasticboy/vim-markdown",
+  --   ft = { "markdown" },
+  --   dependencies = { "godlygeek/tabular" },
+  -- },
   { "L3MON4D3/LuaSnip" },
 --  { "github/copilot.vim" },
   {
@@ -450,11 +462,7 @@ require('lualine').setup({
   },
 })
 
---require("nvim-treesitter.configs").setup({
---  ensure_installed = { "yaml", "json", "bash", "go", "lua", "dockerfile", "terraform" },
---  highlight = { enable = true },
---  indent = { enable = true },
---})
+-- Treesitter is configured in the plugin spec above.
 
 local telescope = require("telescope")
 local actions = require("telescope.actions")
@@ -477,5 +485,4 @@ local builtin = require("telescope.builtin")
 vim.api.nvim_create_user_command("GitGrepRoot", function()
   builtin.git_grep({ cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1] })
 end, {})
-
 
