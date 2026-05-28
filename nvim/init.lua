@@ -23,6 +23,7 @@ end
 -- Bootstrap Lazy.nvim
 require("bootstrap")
 require("plugins")
+require("treesitter_compat")
 require("lsp")
 require("keymaps")
 require("settings")
@@ -70,4 +71,3 @@ vim.o.cursorcolumn = true
 
 
 -- Lazy.setup is now initialized in lua/plugins.lua
-

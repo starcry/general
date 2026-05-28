@@ -147,6 +147,10 @@ require("lazy").setup({
       enable = true,
       max_lines = 3,
       multiline_threshold = 20,
+      on_attach = function(buf)
+        local bo = vim.bo[buf]
+        return bo.buftype == "" and bo.filetype ~= "" and bo.filetype ~= "NvimTree"
+      end,
     },
   },
 
@@ -485,4 +489,3 @@ local builtin = require("telescope.builtin")
 vim.api.nvim_create_user_command("GitGrepRoot", function()
   builtin.git_grep({ cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1] })
 end, {})
-

@@ -75,7 +75,9 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Auto-open File Tree when starting Neovim
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
-    require("nvim-tree.api").tree.open()
+    vim.schedule(function()
+      require("nvim-tree.api").tree.open()
+    end)
   end,
 })
 
@@ -89,4 +91,3 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end,
 })
-
