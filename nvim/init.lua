@@ -23,7 +23,7 @@ end
 -- Bootstrap Lazy.nvim
 require("bootstrap")
 require("plugins")
-require("treesitter_compat")
+-- treesitter is configured in the lazy plugin spec in plugins.lua
 require("lsp")
 require("keymaps")
 require("settings")

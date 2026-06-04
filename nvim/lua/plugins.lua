@@ -245,11 +245,15 @@ require("lazy").setup({
   {
     "zbirenbaum/copilot.lua",
     enabled = function()
-      return vim.g.copilot_mode == "cmp"
+      -- "cmp" mode: copilot.lua drives inline suggestions via cmp source
+      -- "both" mode: copilot.vim handles inline suggestions; copilot.lua
+      --              runs silently so avante.nvim can authenticate
+      return vim.g.copilot_mode == "cmp" or vim.g.copilot_mode == "both"
     end,
     config = function()
       require("copilot").setup({
-        -- we disable Copilot’s inline suggestion/panel
+        -- Disable inline suggestions and panel so copilot.vim (in "both" mode)
+        -- remains the sole provider of inline suggestions
         suggestion = { enabled = false },
         panel = { enabled = false },
       })
@@ -294,7 +298,8 @@ require("lazy").setup({
   {"b0o/schemastore.nvim"},
   {
     "williamboman/mason.nvim",
-    build = ":MasonUpdate", -- This will update mason when you run :Lazy sync
+    -- build = ":MasonUpdate" removed: crashes on Neovim 0.12 due to async API mismatch.
+    -- Run :MasonUpdate manually when needed.
     config = function()
       require("mason").setup({
         -- (optional) custom mason settings here

@@ -1,5 +1,6 @@
 export VISUAL=nvim
 export EDITOR="$VISUAL"
+export COLORTERM=truecolor
 
 #alias ms="minikube start --extra-config=controller-manager.HorizontalPodAutoscalerUseRESTClients=true; minikube addons enable ingress"
 alias ms="minikube start; minikube addons enable ingress"
