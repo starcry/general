@@ -1,3 +1,4 @@
+--[[ Copilot helper disabled: account suspended
 local copilot = {}
 
 local showDocument = function(err, result, ctx, _)
@@ -88,3 +89,4 @@ copilot.rpc_notify = function(client_id, method, params)
 end
 
 return copilot
+--]]

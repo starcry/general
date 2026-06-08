@@ -1,7 +1,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.g.copilot_mode = "both"
+-- vim.g.copilot_mode = "both"
+vim.g.copilot_mode = "disabled"
 -- Possible values:
 -- "disabled" => no Copilot at all; only nvim-cmp with LSP
 -- "native"   => official GitHub Copilot (github/copilot.vim) with inline suggestions
@@ -28,8 +29,8 @@ require("lsp")
 require("keymaps")
 require("settings")
 require("ui")
-require("copilot_native")
--- require("treesitter")  -- DISABLED: treesitter ABI mismatch
+-- require("copilot_native")
+-- require("treesitter")  -- DISABLED: treesitter ABI mismatch with Neovim 0.12
 require("git")
 
 

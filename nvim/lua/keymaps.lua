@@ -437,13 +437,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --     vim.cmd("startinsert!")
     --   end)
     -- end, { desc = "CopilotChat: context = current file" })
-    vim.keymap.set("n", "<leader>hp", ":Copilot panel<CR>", { desc = "Copilot Panel" })
-    vim.keymap.set("n", "<leader>ha", ":CopilotAction<CR>", { desc = "Copilot Action" })
-    vim.keymap.set("i", "<C-l>", 'copilot#Accept("")', {
-      expr = true,
-      replace_keycodes = false,
-      desc = "Copilot Accept",
-    })
+    -- vim.keymap.set("n", "<leader>hp", ":Copilot panel<CR>", { desc = "Copilot Panel" })
+    -- vim.keymap.set("n", "<leader>ha", ":CopilotAction<CR>", { desc = "Copilot Action" })
+    -- vim.keymap.set("i", "<C-l>", 'copilot#Accept("")', {
+    --   expr = true,
+    --   replace_keycodes = false,
+    --   desc = "Copilot Accept",
+    -- })
 
   end,
 })

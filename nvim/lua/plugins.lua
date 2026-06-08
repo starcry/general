@@ -130,28 +130,33 @@ require("lazy").setup({
     end
   },
 
-  -- Treesitter (including Markdown sticky heading context)
+  -- Treesitter disabled: master branch incompatible with Neovim 0.12
+  -- {
+  --   "nvim-treesitter/nvim-treesitter",
+  --   build = ":TSUpdate",
+  --   config = function()
+  --     require("nvim-treesitter.configs").setup({
+  --       ensure_installed = { "markdown", "markdown_inline" },
+  --       highlight = { enable = true },
+  --     })
+  --   end,
+  -- },
+  -- {
+  --   "nvim-treesitter/nvim-treesitter-context",
+  --   opts = {
+  --     enable = true,
+  --     max_lines = 3,
+  --     multiline_threshold = 20,
+  --     on_attach = function(buf)
+  --       local bo = vim.bo[buf]
+  --       return bo.buftype == "" and bo.filetype ~= "" and bo.filetype ~= "NvimTree"
+  --     end,
+  --   },
+  -- },
   {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "markdown", "markdown_inline" },
-        highlight = { enable = true },
-      })
-    end,
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    opts = {
-      enable = true,
-      max_lines = 3,
-      multiline_threshold = 20,
-      on_attach = function(buf)
-        local bo = vim.bo[buf]
-        return bo.buftype == "" and bo.filetype ~= "" and bo.filetype ~= "NvimTree"
-      end,
-    },
+    "plasticboy/vim-markdown",
+    ft = { "markdown" },
+    dependencies = { "godlygeek/tabular" },
   },
 
   -- UI Enhancements (File Explorer)
@@ -175,25 +180,25 @@ require("lazy").setup({
   -- },
   { "L3MON4D3/LuaSnip" },
 --  { "github/copilot.vim" },
-  {
-    "github/copilot.vim",
-    enabled = function()
-      return vim.g.copilot_mode == "native" or (vim.g.copilot_mode == "both")
-    end,
-    config = function()
-      -- OPTIONAL: override the default Copilot <Tab> acceptance
-      -- so it doesn’t conflict with nvim-cmp
-      vim.g.copilot_no_tab_map = true
-      vim.api.nvim_set_keymap(
-        "i",
-        "<C-j>",
-        'copilot#Accept("<CR>")',
-        { silent = true, expr = true, noremap = true }
-      )
-      -- Now inline Copilot suggestions accept with <C-l>
-      -- and won't steal <Tab> from nvim-cmp
-    end
-  },
+  --   {
+  --     "github/copilot.vim",
+  --     enabled = function()
+  --       return vim.g.copilot_mode == "native" or (vim.g.copilot_mode == "both")
+  --     end,
+  --     config = function()
+  --       -- OPTIONAL: override the default Copilot <Tab> acceptance
+  --       -- so it doesn’t conflict with nvim-cmp
+  --       vim.g.copilot_no_tab_map = true
+  --       vim.api.nvim_set_keymap(
+  --         "i",
+  --         "<C-j>",
+  --         'copilot#Accept("<CR>")',
+  --         { silent = true, expr = true, noremap = true }
+  --       )
+  --       -- Now inline Copilot suggestions accept with <C-l>
+  --       -- and won't steal <Tab> from nvim-cmp
+  --     end
+  --   },
   {
       "windwp/nvim-autopairs",
       event = "InsertEnter",
@@ -242,23 +247,24 @@ require("lazy").setup({
       -- See :h CopilotChat or the README for options
     },
   },
-  {
-    "zbirenbaum/copilot.lua",
-    enabled = function()
-      -- "cmp" mode: copilot.lua drives inline suggestions via cmp source
-      -- "both" mode: copilot.vim handles inline suggestions; copilot.lua
-      --              runs silently so avante.nvim can authenticate
-      return vim.g.copilot_mode == "cmp" or vim.g.copilot_mode == "both"
-    end,
-    config = function()
-      require("copilot").setup({
-        -- Disable inline suggestions and panel so copilot.vim (in "both" mode)
-        -- remains the sole provider of inline suggestions
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
-    end
-  },
+  -- Copilot helper (disabled: account suspended)
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   enabled = function()
+  --     -- "cmp" mode: copilot.lua drives inline suggestions via cmp source
+  --     -- "both" mode: copilot.vim handles inline suggestions; copilot.lua
+  --     --              runs silently so avante.nvim can authenticate
+  --     return vim.g.copilot_mode == "cmp" or vim.g.copilot_mode == "both"
+  --   end,
+  --   config = function()
+  --     require("copilot").setup({
+  --       -- Disable inline suggestions and panel so copilot.vim (in "both" mode)
+  --       -- remains the sole provider of inline suggestions
+  --       suggestion = { enabled = false },
+  --       panel = { enabled = false },
+  --     })
+  --   end
+  -- },
 
   -- 3. zbirenbaum/copilot-cmp (turn Copilot into a cmp source)
   {
@@ -403,21 +409,21 @@ require("lazy").setup({
       -- this file can contain specific instructions for your project
       instructions_file = "avante.md",
       -- for example
-      provider = "copilot",
-      auto_suggestions_provider = "copilot",
-      providers = {
-        copilot = {
-          endpoint = "https://api.githubcopilot.com",
-          model = "gpt-4o-2024-05-13",
-          proxy = nil,
-          allow_insecure = false,
-          timeout = 30000,
-          extra_request_body = {
-            temperature = 0,
-            max_tokens = 4096,
-          },
-        },
-      },
+      -- provider = "copilot",
+      -- auto_suggestions_provider = "copilot",
+      -- providers = {
+      --   copilot = {
+      --     endpoint = "https://api.githubcopilot.com",
+      --     model = "gpt-4o-2024-05-13",
+      --     proxy = nil,
+      --     allow_insecure = false,
+      --     timeout = 30000,
+      --     extra_request_body = {
+      --       temperature = 0,
+      --       max_tokens = 4096,
+      --     },
+      --   },
+      -- },
     },
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -430,7 +436,7 @@ require("lazy").setup({
       "stevearc/dressing.nvim", -- for input provider dressing
       "folke/snacks.nvim", -- for input provider snacks
       "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      "zbirenbaum/copilot.lua", -- for providers='copilot'
+      -- "zbirenbaum/copilot.lua", -- for providers='copilot'
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",
