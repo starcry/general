@@ -130,33 +130,34 @@ require("lazy").setup({
     end
   },
 
-  -- Treesitter disabled: master branch incompatible with Neovim 0.12
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   build = ":TSUpdate",
-  --   config = function()
-  --     require("nvim-treesitter.configs").setup({
-  --       ensure_installed = { "markdown", "markdown_inline" },
-  --       highlight = { enable = true },
-  --     })
-  --   end,
-  -- },
-  -- {
-  --   "nvim-treesitter/nvim-treesitter-context",
-  --   opts = {
-  --     enable = true,
-  --     max_lines = 3,
-  --     multiline_threshold = 20,
-  --     on_attach = function(buf)
-  --       local bo = vim.bo[buf]
-  --       return bo.buftype == "" and bo.filetype ~= "" and bo.filetype ~= "NvimTree"
-  --     end,
-  --   },
-  -- },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    build = ":TSUpdate",
+    config = function()
+      require("treesitter")
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    opts = {
+      enable = true,
+      max_lines = 3,
+      multiline_threshold = 20,
+      mode = "topline",
+      on_attach = function(buf)
+        local bo = vim.bo[buf]
+        return bo.buftype == "" and bo.filetype ~= "" and bo.filetype ~= "NvimTree"
+      end,
+    },
+  },
   {
     "plasticboy/vim-markdown",
     ft = { "markdown" },
     dependencies = { "godlygeek/tabular" },
+    init = function()
+      vim.g.vim_markdown_folding_disabled = 1
+    end,
   },
 
   -- UI Enhancements (File Explorer)

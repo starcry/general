@@ -30,7 +30,7 @@ require("keymaps")
 require("settings")
 require("ui")
 -- require("copilot_native")
--- require("treesitter")  -- DISABLED: treesitter ABI mismatch with Neovim 0.12
+require("treesitter")
 require("git")
 
 
