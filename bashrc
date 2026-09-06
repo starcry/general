@@ -482,3 +482,15 @@ function tmux_insert_window() {
 alias ptest="pytest -W error"
 
 export PATH="$PATH:/home/aidan/git/general/scripts/python/dist"
+
+alias ca="cursor agent --model auto --mode plan"
+
+function machine() {
+  echo "=== CPU INFO ===" && lscpu | grep -E "Model name|Core\(s\) per socket|Socket\(s\)|Thread\(s\) per core" && echo -e "\n=== RAM INFO ===" && free -h && echo -e "\n=== NVIDIA GPU INFO ===" && nvidia-smi --query-gpu=gpu_name,memory.total,driver_version --format=csv,noheader
+}
+
+function monitor() {
+  inotifywait -m -r   -e create -e modify -e close_write -e moved_to -e moved_from -e delete   --timefmt '%Y-%m-%d %H:%M:%S'   --format '%T %-12e %w%f' .
+}
+
+alias tb="tmux load-buffer $1"
