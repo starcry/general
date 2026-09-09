@@ -72,6 +72,7 @@
 | `<leader>y` (n/x) | Yank to **system clipboard**. |
 | `<leader>Y` (n) | Yank **line** to system clipboard. |
 | `<leader>ya` (n) | Yank **file** to system clipboard. |
+| `<leader>T` (n/x) | Yank selection (or current line) to **tmux paste-buffer**. |
 | `<leader>d` (n/x) | Cut (delete) to system clipboard. |
 | `<leader>D` (n) | Cut **line** to system clipboard. |
 | `<leader>p` (n/x) | Paste from system clipboard **after** cursor. |

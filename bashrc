@@ -386,8 +386,12 @@ function run_python_script() {
 #neovim magics
 # now you can copy to clipboard with '+y'
 #set clipboard+=unnamedplus
-source <(kubectl completion bash)
-complete -C aws_completer aws
+if command -v kubectl >/dev/null 2>&1; then
+  source <(kubectl completion bash)
+fi
+if command -v aws_completer >/dev/null 2>&1; then
+  complete -C aws_completer aws
+fi
 
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
@@ -413,7 +417,7 @@ flash_screen() {
 alias whatismyip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 bh() {
-  local file="$HOME/git/general/BASHRC_README.md"
+  local file="${GENERAL_REPO:-$HOME/git/general}/BASHRC_README.md"
   [ -f "$file" ] || { echo "README not found: $file" >&2; return 1; }
 
   local viewer=""
@@ -481,7 +485,13 @@ function tmux_insert_window() {
 
 alias ptest="pytest -W error"
 
-export PATH="$PATH:/home/aidan/git/general/scripts/python/dist"
+export GENERAL_REPO="${GENERAL_REPO:-$HOME/git/general}"
+export PATH="$HOME/.local/bin:$PATH:$GENERAL_REPO/scripts/python/dist"
+
+# NVM (installed by install.sh)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 
 alias ca="cursor agent --model auto --mode plan"
 
@@ -494,3 +504,4 @@ function monitor() {
 }
 
 alias tb="tmux load-buffer $1"
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)"

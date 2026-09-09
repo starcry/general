@@ -345,6 +345,26 @@ vim.keymap.set("n", "<leader>D", '"+D', { desc = "Cut line to system clipboard" 
 vim.keymap.set({ "n", "x" }, "<leader>p", '"+p', { desc = "Paste from system clipboard (after cursor)" })
 vim.keymap.set({ "n", "x" }, "<leader>P", '"+P', { desc = "Paste from system clipboard (before cursor)" })
 
+-- Yank selection (visual) or current line (normal) to tmux paste-buffer
+vim.keymap.set({ "n", "x" }, "<leader>T", function()
+  local text
+  local mode = vim.api.nvim_get_mode().mode
+  if mode == "v" or mode == "V" or mode == "\22" then
+    local save = vim.fn.getreg("z")
+    local save_type = vim.fn.getregtype("z")
+    vim.cmd('normal! "zy')
+    text = vim.fn.getreg("z")
+    vim.fn.setreg("z", save, save_type)
+  else
+    text = vim.fn.getline(".")
+  end
+
+  vim.fn.system({ "tmux", "load-buffer", "-" }, text)
+  if vim.v.shell_error ~= 0 then
+    vim.notify("tmux load-buffer failed (not in tmux?)", vim.log.levels.WARN)
+  end
+end, { desc = "Yank to tmux buffer" })
+
 -- Prevent Mouse Clicks from Moving Cursor (but allow tabline clicks for tab switching)
 vim.keymap.set("n", "<LeftMouse>", function()
   local pos = vim.fn.getmousepos()
