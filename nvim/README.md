@@ -89,7 +89,7 @@ Flash is installed but often forgotten.
 ### SESSION MANAGEMENT
 *   **Switch Project**: `<leader>wr` (Search Sessions)
 *   **Restore Last**: `<leader>wl`
-*   **Save Current**: `<leader>ws` (Used by `<prefix> Q` script)
+*   **Save Current**: `<leader>ws` (also sent by `<prefix> Q` pre-kill hook before tmux exits)
 *   **Restore**: Automatic upon opening Neovim in a directory (via `auto_restore = true`).
 *   **Wipe Current**: `<leader>wd`
 *   **Toggle Auto-Save**: `<leader>wt`

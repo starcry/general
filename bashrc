@@ -40,6 +40,7 @@ alias tfp="tf plan -out=tf.plan"
 alias tfa="tf apply tf.plan"
 alias rb=". ~/.bashrc; . ~/.bash_profile"
 alias tgo="tmux new -s aidan"
+alias trestore="bash ~/git/general/scripts/tmux_persist/restore.sh"
 
 alias fn="find ./ -name $1"
 
@@ -486,7 +487,7 @@ function tmux_insert_window() {
 alias ptest="pytest -W error"
 
 export GENERAL_REPO="${GENERAL_REPO:-$HOME/git/general}"
-export PATH="$HOME/.local/bin:$PATH:$GENERAL_REPO/scripts/python/dist"
+export PATH="$HOME/.local/bin:$PATH:$GENERAL_REPO/scripts/python/dist:$HOME/git/general/scripts/tmux_persist/"
 
 # NVM (installed by install.sh)
 export NVM_DIR="$HOME/.nvm"
@@ -505,3 +506,4 @@ function monitor() {
 
 alias tb="tmux load-buffer $1"
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)"
+alias codex="codex --no-alt-screen"

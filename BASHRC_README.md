@@ -31,6 +31,7 @@
 | `rb`                | Reload `~/.bashrc` and `~/.bash_profile`.                                                        | `rb`                                         |
 |---------|--------------|---------|
 | `tgo`               | Open a new tmux session named `aidan`.                                                           | `tgo`                                        |
+| `trestore`          | Restore last tmux persist snapshot and attach to it.                                           | `trestore`                                   |
 |---------|--------------|---------|
 | `fn`                | Find files by name (in current tree).                                                            | `fn "*.tf"`                                  |
 |---------|--------------|---------|
@@ -135,9 +136,9 @@
 | `gd`                | Create format-patch files from origin/default branch to HEAD in /tmp/patches.                    | `gd`                                         |
 |---------|--------------|---------|
 |---------|--------------|---------|
-| `<prefix> Q`        | **Smart Save & Quit:** Saves Neovim sessions, saves Tmux session, and kills server. | `<prefix> Q`                                 |
+| `<prefix> Q`        | **Save & Quit:** Snapshot all tmux sessions (layout, titles, running commands), run pre-kill hooks (nvim AutoSession save), kill server. | `<prefix> Q`                                 |
 |---------|--------------|---------|
-| `<prefix> + Ctrl-r` | **Restore Session:** Restores the last saved Tmux environment (and Neovim sessions). | `<prefix> + Ctrl-r`                          |
+| `<prefix> + Ctrl-r` | **Restore Session:** Rebuild last snapshot (prefer `trestore` from a normal shell after reboot). | `<prefix> + Ctrl-r`                          |
 |---------|--------------|---------|
 | `<prefix> N`        | **Insert Window:** Prompts for index and inserts current tmux window at that index (uses tmux_insert_window from bashrc). | `<prefix> N`                                 |
 | `<prefix> r`        | **Rename Window:** Renames tmux window to current directory name. | `<prefix> r`                                 |

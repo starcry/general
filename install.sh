@@ -290,7 +290,7 @@ link_path "$REPO_DIR/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 link_path "$REPO_DIR/nvim/lua"      "$HOME/.config/nvim/lua"
 
 # ---------------------------------------------------------------------------
-# 10. TPM + plugins (resurrect/continuum/etc.)
+# 10. TPM + plugins
 # ---------------------------------------------------------------------------
 if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
   log "Installing TPM..."
@@ -314,8 +314,8 @@ $(echo -e "${GREEN}Install complete.${NC}")
 Next steps:
   1. Restart your shell (or: source ~/.bashrc)
   2. Open nvim once — Lazy will bootstrap plugins on first launch
-  3. Open tmux — plugins are already installed; use Ctrl-b Q to save/quit,
-     and Ctrl-b Ctrl-r to restore after reboot
+  3. Open tmux — use Ctrl-b Q to save/quit (custom persist under
+     ~/.local/share/tmux-persist/), and `trestore` after reboot (or Ctrl-b Ctrl-r inside tmux)
 
 Symlinks:
   ~/.bashrc              -> $REPO_DIR/bashrc
